@@ -8,8 +8,8 @@ venv/
 .env
 
 # ML artifacts
-models/
-*.pkl
+# models/
+# *.pkl
 
 # Data (optional — depends on size)
 # data/
