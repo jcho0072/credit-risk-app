@@ -7,6 +7,8 @@ load_dotenv()
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
+print("PROJECT_ROOT:", PROJECT_ROOT)
+
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
     f"sqlite:///{PROJECT_ROOT / 'app.db'}"
