@@ -22,11 +22,6 @@ def serve():
     return send_from_directory(app.static_folder, "index.html")
 
 
-
-
-print("CWD: ",os.getcwd())
-
-
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -96,7 +91,6 @@ class Financials(db.Model):
 
 with app.app_context():
     db.create_all()
-    # print("Tables created")
 
 
 
@@ -186,15 +180,14 @@ def add_applications():
         loan_percent_income = data["loan_percent_income"],
 
         cb_person_default_on_file = data["cb_person_default_on_file"],
-        cb_person_cred_hist_length = data["cb_person_cred_hist_length"]
+        cb_person_cred_hist_length = data["cb_person_cred_hist_length"],
+        pred_probability = result["probability"],
+        pred_status = result["loan_status"],
+        expected_loss = result["expected_loss"],
+        threshold = result["threshold"],
+        decision = result["decision"],
+        risk = result["risk"]
     )
-        
-        new_record.pred_probability = result["probability"]
-        new_record.pred_status = result["loan_status"]
-        new_record.expected_loss = result["expected_loss"]
-        new_record.threshold = result["threshold"]
-        new_record.decision = result["decision"]
-        new_record.risk = result["risk"]
         
 
         db.session.add(new_record)
@@ -205,7 +198,7 @@ def add_applications():
     
     except Exception as e:
         db.session.rollback()
-        return jsonify({"error":"Failed to create application"}), 400
+        return jsonify({"error":"Failed to create application"}), 500
     
 
     
