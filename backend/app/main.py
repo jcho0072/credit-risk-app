@@ -119,14 +119,14 @@ def add_applications():
 
     # Request type validation
     if not request.is_json:
-        return ({"error" : "Request must be JSON"}), 400
+        return jsonify({"error" : "Request must be JSON"}), 400
     
     data = request.get_json(silent=True)
 
 
     # JSON parsing validation 
     if data is None:
-        return ({"error" : "Invalid JSON"}), 400
+        return jsonify({"error" : "Invalid JSON"}), 400
     
 
     
@@ -149,22 +149,30 @@ def add_applications():
     missing = [field for field in required_fields if field not in data]
 
     if missing:
-        return jsonify({"error" : "Data not in required field",
-                        "fields" : missing}), 404
+        return jsonify({"error" : "Missing required fields",
+                        "fields" : missing}), 400
     
 
     # Data type validation
+    if not isinstance(data["person_name"], str) or not data["person_name"].strip():
+        return jsonify({"error": "person_name must be a string"}), 400
     if not isinstance(data["person_age"], int):
          return jsonify({"error": "person_age must be an integer"}), 400
     
 
     # Value validation
-    if data <= 0:
+    if data["loan_amnt"] <= 0:
+         return jsonify({"error": "Value cannot be below 0"}), 400
+    if data["loan_int_rate"] <= 0:
+         return jsonify({"error": "Value cannot be below 0"}), 400
+    if data["loan_percent_income"] <= 0:
          return jsonify({"error": "Value cannot be below 0"}), 400
 
 
-    
-    new_record = Financials(
+    try:
+        result = run_prediction(data)
+
+        new_record = Financials(
         person_name = data["person_name"],
         person_age = data["person_age"],
         person_income = data["person_income"],
@@ -180,28 +188,30 @@ def add_applications():
         cb_person_default_on_file = data["cb_person_default_on_file"],
         cb_person_cred_hist_length = data["cb_person_cred_hist_length"]
     )
+        
+        new_record.pred_probability = result["probability"]
+        new_record.pred_status = result["loan_status"]
+        new_record.expected_loss = result["expected_loss"]
+        new_record.threshold = result["threshold"]
+        new_record.decision = result["decision"]
+        new_record.risk = result["risk"]
+        
 
+        db.session.add(new_record)
+        db.session.commit()
+
+        return jsonify(new_record.to_dict()), 201
+        
+    
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error":"Failed to create application"}), 400
     
 
     
-    db.session.add(new_record)
-    db.session.flush()
 
 
-    result = run_prediction(data)
-
-    new_record.pred_probability = result["probability"]
-    new_record.pred_status = result["loan_status"]
-    new_record.expected_loss = result["expected_loss"]
-    new_record.threshold = result["threshold"]
-    new_record.decision = result["decision"]
-    new_record.risk = result["risk"]
     
-
-    db.session.commit()
-
-
-    return jsonify(new_record.to_dict()), 201
 
 
 
