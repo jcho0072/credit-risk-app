@@ -9,7 +9,6 @@ function CreditPage(){
     // const [query, setQuery] = useState("")
 
     const url = `${import.meta.env.VITE_API_URL}`;
-    console.log("API URL:", import.meta.env.VITE_API_URL);
 
     async function loadApplications () {
         const res = await fetch(`${url}/applications` ,{
