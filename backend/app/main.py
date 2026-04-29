@@ -107,15 +107,62 @@ def get_applications():
         applications = Financials.query.all()
         return jsonify([record.to_dict() for record in applications]), 200
 
+    except Exception as e:
+        return jsonify({
+            "error:" "Failed to fetch application"
+        }), 500
+
 
 
 @app.route("/applications", methods=['POST'])
 def add_applications():
-    data = request.json
 
-    # Initial validation
-    if not data:
-        return jsonify({"error " : "Invalid data"}), 400
+    # Request type validation
+    if not request.is_json:
+        return ({"error" : "Request must be JSON"}), 400
+    
+    data = request.get_json(silent=True)
+
+
+    # JSON parsing validation 
+    if data is None:
+        return ({"error" : "Invalid JSON"}), 400
+    
+
+    
+    required_fields = [
+        "person_name",
+        "person_age",
+        "person_income",
+        "person_home_ownership",
+        "person_emp_length",
+        "loan_intent",
+        "loan_grade",
+        "loan_amnt",
+        "loan_int_rate",
+        "loan_percent_income",
+        "cb_person_default_on_file",
+        "cb_person_cred_hist_length"
+    ]
+
+    # Missing field validation 
+    missing = [field for field in required_fields if field not in data]
+
+    if missing:
+        return jsonify({"error" : "Data not in required field",
+                        "fields" : missing}), 404
+    
+
+    # Data type validation
+    if not isinstance(data["person_age"], int):
+         return jsonify({"error": "person_age must be an integer"}), 400
+    
+
+    # Value validation
+    if data <= 0:
+         return jsonify({"error": "Value cannot be below 0"}), 400
+
+
     
     new_record = Financials(
         person_name = data["person_name"],
@@ -133,6 +180,8 @@ def add_applications():
         cb_person_default_on_file = data["cb_person_default_on_file"],
         cb_person_cred_hist_length = data["cb_person_cred_hist_length"]
     )
+
+    
 
     
     db.session.add(new_record)
@@ -182,7 +231,6 @@ def update_applications(id):
     application = Financials.query.get(id)
     if not application:
         return jsonify({"error":"Not found"}), 404
-    
 
 
     allowed_fields = [
