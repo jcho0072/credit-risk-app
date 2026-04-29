@@ -96,15 +96,16 @@ class Financials(db.Model):
 
 with app.app_context():
     db.create_all()
-    print("Tables created")
+    # print("Tables created")
 
 
 
 # Methods
 @app.route("/applications", methods = ["GET"])
 def get_applications():
-    applications = Financials.query.all()
-    return jsonify([record.to_dict() for record in applications]), 201
+    try:
+        applications = Financials.query.all()
+        return jsonify([record.to_dict() for record in applications]), 200
 
 
 
