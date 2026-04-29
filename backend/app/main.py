@@ -181,6 +181,7 @@ def add_applications():
 
         cb_person_default_on_file = data["cb_person_default_on_file"],
         cb_person_cred_hist_length = data["cb_person_cred_hist_length"],
+
         pred_probability = result["probability"],
         pred_status = result["loan_status"],
         expected_loss = result["expected_loss"],
@@ -192,6 +193,8 @@ def add_applications():
 
         db.session.add(new_record)
         db.session.commit()
+
+        print(jsonify({"success":"successful addition"}), 201)
 
         return jsonify(new_record.to_dict()), 201
         

@@ -8,14 +8,12 @@ function CreditPage(){
     const [applications, setApplications] = useState([])
     // const [query, setQuery] = useState("")
 
-    const url = ""
+    const url = `${import.meta.env.VITE_API_URL}`;
+    console.log("API URL:", import.meta.env.VITE_API_URL);
 
     async function loadApplications () {
         const res = await fetch(`${url}/applications` ,{
             method:'GET',
-            headers: {
-                "Content-type": "application/json"
-            }
         })
 
         const data = await res.json()
