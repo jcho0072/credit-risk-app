@@ -1,6 +1,6 @@
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, jsonify, request, send_from_directory, g
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect
 from flask_cors import CORS
 from shared.feature_engineering import FeatureEngineer
 
@@ -17,9 +17,9 @@ load_dotenv()
 app = Flask(__name__, static_folder="../../frontend/dist", static_url_path="/")
 CORS(app)
 
-@app.route("/")
-def serve():
-    return send_from_directory(app.static_folder, "index.html")
+# @app.route("/")
+# def serve():
+#     return send_from_directory(app.static_folder, "index.html")
 
 
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
@@ -29,6 +29,7 @@ db = SQLAlchemy(app)
 
 
 df = pd.DataFrame
+
 
 
 
@@ -92,6 +93,8 @@ class Financials(db.Model):
 with app.app_context():
     db.create_all()
 
+    
+
 
 
 # Methods
@@ -99,7 +102,9 @@ with app.app_context():
 def get_applications():
     try:
         applications = Financials.query.all()
+
         return jsonify([record.to_dict() for record in applications]), 200
+
 
     except Exception as e:
         return jsonify({
@@ -202,12 +207,6 @@ def add_applications():
     except Exception as e:
         db.session.rollback()
         return jsonify({"error":"Failed to create application"}), 500
-    
-
-    
-
-
-    
 
 
 
@@ -224,7 +223,17 @@ def delete_applications(id):
     return jsonify({"message":"deleted"})
 
 
+# @app.route("/applications", methods=["DELETE"])
+# def delete_all_applications():
+#     try:
+#         Financials.query.delete()
+#         db.session.commit()
 
+#         return {"message": "All applications deleted"}, 200
+
+#     except Exception as e:
+#         db.session.rollback()
+#         return {"error": "Failed to delete applications"}, 500
 
 
 @app.route("/applications/<int:id>", methods = ['PUT'])
@@ -254,9 +263,11 @@ def update_applications(id):
         "cb_person_cred_hist_length"
     ]
 
+
     for field in allowed_fields:
         if field in data:
             setattr(application, field, data[field])
+
 
     result = run_prediction(data)
 
