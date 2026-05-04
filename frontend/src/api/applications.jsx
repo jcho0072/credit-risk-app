@@ -4,11 +4,38 @@
 const url = `${import.meta.env.VITE_API_URL}`;
 
 export async function getApplications() {
-    const res = await fetch(`${url}/applications`, {
+    try {
+        const res = await fetch(`${url}/applications`, {
         method: "GET"
     })
-    if (!res.ok) throw new Error("failed to fetch applications")
-    return res.json()
+
+    // Handle HTTP errors
+    if (!res.ok) 
+        {
+            let errorMessage = "Failed to fetch applications"
+
+            try{
+                const errorData = await res.json()
+                errorMessage = errorData.error || errorMessage
+            } catch {
+                
+            }
+            throw new Error(errorMessage)
+        }
+    
+    // Handle JSON parsing 
+    try {
+        return await res.json()
+    } catch {
+        throw new Error("Invalid response format from server")
+    } 
+
+    } catch (err) {
+        // Handle network and fetch failures
+        throw new Error(err.message || "Network error")
+    }
+    
+    
 }
 
 export async function createApplication(payload) {
