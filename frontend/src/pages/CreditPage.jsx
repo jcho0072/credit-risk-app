@@ -17,8 +17,6 @@ function CreditPage(){
         updateApplication
     } = useApplications() 
 
-    console.log("APPLICATIONS STATE:", applications)
-
     return (
         <div>
             <h2>
