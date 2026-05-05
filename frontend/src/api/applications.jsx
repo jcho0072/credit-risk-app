@@ -3,146 +3,67 @@
 
 const url = `${import.meta.env.VITE_API_URL}`;
 
-export async function getApplications() {
+
+
+async function request(endpoint, options = {}) {
     try {
-        const res = await fetch(`${url}/applications`, {
-        method: "GET"
-    })
+        const res = await fetch(`${url}${endpoint}`, options)
 
-    // Handle HTTP errors
-    if (!res.ok) 
-        {
-            let errorMessage = "Failed to fetch applications"
-
-            try{
+        // Handle HTTP errors
+        if (!res.ok) {
+            let errorMessage = "Request failed"
+            try {
                 const errorData = await res.json()
                 errorMessage = errorData.error || errorMessage
-            } catch {
-                
-            }
+            } catch {}
             throw new Error(errorMessage)
         }
-    
-    // Handle JSON parsing 
-    try {
-        return await res.json()
-    } catch {
-        throw new Error("Invalid response format from server")
-    } 
 
+        // Handle JSON parsing
+        try {
+            return await res.json()
+        } catch {
+            throw new Error("Invalid response format from server")
+        }
 
     } catch (err) {
-        // Handle network and fetch failures
         throw new Error(err.message || "Network error")
     }
-    
-    
+}
+
+
+export async function getApplications() {
+    const res = await fetch(`${url}/applications`, {
+    method: "GET"
+})
 }
 
 export async function createApplication(payload) {
-    try {
-        const res = await fetch(`${url}/applications`, {
-        method: "POST",
-        headers: {
-                "Content-type": "application/json"
-            },
-        body: JSON.stringify(payload)
-    })
-
-    if (!res.ok) {
-        let errorMessage = "Failed to create application"
-        
-        try {
-            const errorData = await res.json()
-            errorMessage = errorData.error || errorMessage 
-        } catch {
-
-        }  
-        throw new Error(errorMessage)
-
-    } // Handle JSON parsing
-     try {
-        // network successful  
-        return await res.json()
-    } catch {
-        throw new Error("Invalid response format from server") }
-
-
-    } catch (err){
-        // Handle network and fetch failures
-        throw new Error(err.message || "Network error")
-    }
+    const res = await fetch(`${url}/applications`, {
+    method: "POST",
+    headers: {
+            "Content-Type": "application/json"
+        },
+    body: JSON.stringify(payload)
+})
 
 }
 
 export async function updateApplication(id, payload) {
-    try {
-        const res = await fetch(`${url}/applications/${id}`, {
-        method: "PUT",
-        headers: {
-                "Content-type": "application/json"
-            },
-        body: JSON.stringify(payload)
-    })
-
-     if (!res.ok) {
-        let errorMessage = "Failed to update application"
-        try {
-            const errorData = await res.json()
-            errorMessage = errorData.error || errorMessage
-        } catch {
-
-        } 
-        throw new Error(errorMessage)
-
-
-        try { // Handle JSON parsing
-             return await res.json()
-        } catch {
-            throw new Error("Invalid response format from server")
-        }
-
-     }
-
-    } catch (err){
-        // Handle network and fetch failures
-        throw new Error(err.message || "Network error")
-
-    }  
+    const res = await fetch(`${url}/applications/${id}`, {
+    method: "PUT",
+    headers: {
+            "Content-Type": "application/json"
+        },
+    body: JSON.stringify(payload)
+})
 }
 
 export async function deleteApplication(id) {
-    try {
-        const res = await fetch(`${url}/applications/${id}`, {
-            method:'DELETE' 
-        })
-    if (!res.ok) {
-            let errorMessage = "Failed to delete application"
-            try{
-                const errorData = await res.json()
-                errorMessage = errorData.error || errorMessage
-            } catch {
-
-            }
-            throw new Error(errorMessage)   
-        
+    const res = await fetch(`${url}/applications/${id}`, {
+        method:'DELETE' 
+    })    
     
-    try{
-            // Handle JSON 
-            return await res.json()
-        } catch {
-            throw new Error("Invalid response format from server")
-            }
-        } 
-    }
-
-    catch (err) {
-        // Handle network and fetch failures
-        throw new Error(err.message || "Network error")
-    }
-    
-    
-
 }
 
 // export async function deleteAllApplications() {
