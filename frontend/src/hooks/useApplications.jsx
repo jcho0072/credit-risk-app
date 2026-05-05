@@ -16,12 +16,13 @@ export function useApplications() {
 
     async function loadApplications () {
         setLoading(true)
+        setError(null)
+
         try {
             const data = await getApplications();
-            console.log("FRONTEND RECEIVED:", data)
-            setApplications(data)   
+            setApplications(data) 
         } catch (err) {
-            setLoading(err)
+            setError(err.message)
         } finally {
             setLoading(false)
         }
@@ -34,20 +35,15 @@ export function useApplications() {
 
 
     async function addApplication (app) {
-        console.log("ADDING:", app)
+        
         try {
             const data = await createApplication(app)
-            console.log("RESPONSE:", app)
-
-            // console.log("TYPE:", typeof data)
-            // console.log("IS ARRAY:", Array.isArray(data))
-            // console.log("DATA:", JSON.stringify(data))
-            // console.log("ID:", data.id)
-
             setApplications(prev => [...prev, data])
             
             
         } catch (err) {
+            console.log("HOOK ERROR:", err.message)
+            setError(err.message)
             setLoading(err)
         } 
     }

@@ -25,6 +25,8 @@ function CreditPage(){
                 Applications
             </h2>
 
+            
+
             <div className="layout">
                 <ApplicationForm addApplication = {addApplication}/>
             
@@ -36,6 +38,7 @@ function CreditPage(){
                     />
                 </div>
                 
+                {error && <p>{error}</p>}
             </div>
         </div>
     )

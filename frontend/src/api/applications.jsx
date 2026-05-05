@@ -26,6 +26,7 @@ async function request(endpoint, options = {}) {
             throw new Error("Invalid response format from server")
         }
 
+    // Handle network error
     } catch (err) {
         throw new Error(err.message || "Network error")
     }
@@ -33,37 +34,36 @@ async function request(endpoint, options = {}) {
 
 
 export async function getApplications() {
-    const res = await fetch(`${url}/applications`, {
-    method: "GET"
-})
+    return request("/applications", {
+        method: "GET"
+    })
 }
 
 export async function createApplication(payload) {
-    const res = await fetch(`${url}/applications`, {
-    method: "POST",
-    headers: {
+    return request("/applications", {
+        method: "POST",
+        headers: {
             "Content-Type": "application/json"
         },
-    body: JSON.stringify(payload)
-})
+        body: JSON.stringify(payload)
+    })
 
 }
 
 export async function updateApplication(id, payload) {
-    const res = await fetch(`${url}/applications/${id}`, {
-    method: "PUT",
-    headers: {
-            "Content-Type": "application/json"
-        },
-    body: JSON.stringify(payload)
-})
+    return request(`/applications/${id}`, {
+        method: "PUT",
+        headers: {
+                "Content-Type": "application/json"
+            },
+        body: JSON.stringify(payload)
+    })
 }
 
 export async function deleteApplication(id) {
-    const res = await fetch(`${url}/applications/${id}`, {
-        method:'DELETE' 
-    })    
-    
+    return request(`/applications/${id}`, {
+        method: "DELETE"
+    })
 }
 
 // export async function deleteAllApplications() {
