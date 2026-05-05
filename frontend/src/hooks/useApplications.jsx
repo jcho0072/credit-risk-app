@@ -14,6 +14,22 @@ export function useApplications() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
 
+    function mapErrorToMessage(err) {
+        if (!err || !err.message) {
+            return "Something went wrong. Please try again."
+        }
+        if (err.message.includes("Network")) {
+            return "Unable to connect. Check your internet or try again."
+        }
+        if (err.message.includes("Invalid response")) {
+            return "Server returned an unexpected response"
+        }
+
+        // Backend message fallback
+        return err.message
+    }
+
+
     async function loadApplications () {
         setLoading(true)
         setError(null)
@@ -22,7 +38,8 @@ export function useApplications() {
             const data = await getApplications();
             setApplications(data) 
         } catch (err) {
-            setError(err.message)
+            console.log("HOOK ERROR:", err.message)
+            setError(mapErrorToMessage(err))
         } finally {
             setLoading(false)
         }
@@ -36,24 +53,26 @@ export function useApplications() {
 
     async function addApplication (app) {
         setError(null)
-
         try {
             const data = await createApplication(app)
             setApplications(prev => [...prev, data])
             
         } catch (err) {
             console.log("HOOK ERROR:", err.message)
-            setError(err.message)
-            setLoading(err)
+            setError(mapErrorToMessage(err))
+            
         } 
     }
 
+
      async function removeApplication (id) {
+        setError(null)
         try {
             const data = await deleteApplication(id)
             setApplications((prev) => prev.filter(t => t.id !== id))
        } catch (err){
-            setError(err)
+            console.log("HOOK ERROR:", err.message)
+            setError(mapErrorToMessage(err))
        }
     }
 
@@ -71,7 +90,8 @@ export function useApplications() {
             const data = await updateApplication(id, app)
             setApplications(prev => prev.map(a => a.id === data.id? data : a))
        } catch (err){
-            setError(err)
+            console.log("HOOK ERROR:", err.message)
+            setError(mapErrorToMessage(err))
        } 
     }
 
