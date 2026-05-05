@@ -35,11 +35,11 @@ export function useApplications() {
 
 
     async function addApplication (app) {
-        
+        setError(null)
+
         try {
             const data = await createApplication(app)
             setApplications(prev => [...prev, data])
-            
             
         } catch (err) {
             console.log("HOOK ERROR:", err.message)
