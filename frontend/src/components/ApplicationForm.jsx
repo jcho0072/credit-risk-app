@@ -16,7 +16,38 @@ function ApplicationForm({addApplication}){
         cb_person_cred_hist_length: ""
     }
 
+    const HOME_OWNERSHIP_OPTIONS = [
+        "RENT",
+        "OWN",
+        "MORTGAGE",
+        "OTHER"
+    ]
+
+    const LOAN_GRADE_OPTIONS = [
+        "A",
+        "B",
+        "C",
+        "D"
+    ]
+
+    const validation = {
+        person_name: value => value.trim().length >= 2,
+        person_age: value => value > 18,
+        person_income: value => value >= 18 && value <= 100,
+        person_home_ownership: value => allowed.includes(value),
+        person_emp_length: value => value <= 50,
+        loan_intent: value => HOME_OWNERSHIP_OPTIONS.includes(value),
+        loan_grade: value => LOAN_GRADE_OPTIONS.includes(value),
+        loan_amnt: value => value <= 100000,
+        loan_int_rate: value => value <= 100,
+        loan_percent_income: value => value <= 1,
+        cb_person_default_on_file: value =>["y","n"].includes(value),
+        cb_person_cred_hist_length: value => 0
+
+    }
+
     const [form, setForm] = useState(initialState)
+    const [formError, setFormError] = useState({})
        
     function handleChange(e) {
         const {name, value, type} = e.target
@@ -29,6 +60,12 @@ function ApplicationForm({addApplication}){
 
     function handleSubmit(e) {
         e.preventDefault() // prevent page reload
+
+        setFormError({
+            person_name: "Required",
+            person_age: "Invalid age"
+        })
+
         addApplication(form)
         setForm(initialState)
 }
