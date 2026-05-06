@@ -38,7 +38,7 @@ export function useApplications() {
             const data = await getApplications();
             setApplications(data) 
         } catch (err) {
-            console.log("HOOK ERROR:", err.message)
+            
             const userMessage = mapErrorToMessage(err)
             setError(userMessage)
             
@@ -61,7 +61,7 @@ export function useApplications() {
             setApplications(prev => [...prev, data])
             
         } catch (err) {
-            console.log("HOOK ERROR:", err.message)
+            
             setError(mapErrorToMessage(err))
             
         } finally {
@@ -77,7 +77,7 @@ export function useApplications() {
             const data = await deleteApplication(id)
             setApplications((prev) => prev.filter(t => t.id !== id))
        } catch (err){
-            console.log("HOOK ERROR:", err.message)
+            
             setError(mapErrorToMessage(err))
        } finally {
             setLoading(false)
@@ -100,7 +100,7 @@ export function useApplications() {
             const data = await updateApplication(id, app)
             setApplications(prev => prev.map(a => a.id === data.id? data : a))
        } catch (err){
-            console.log("HOOK ERROR:", err.message)
+            
             setError(mapErrorToMessage(err))
        } finally {
         setLoading(false)

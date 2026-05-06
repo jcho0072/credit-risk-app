@@ -4,7 +4,6 @@ import {useApplications} from "../hooks/useApplications"
 
 import ApplicationForm from "../components/ApplicationForm"
 import ApplicationList from "../components/ApplicationList"
-import ApplicationItem from "../components/ApplicationItem"
 
 function CreditPage(){
 
