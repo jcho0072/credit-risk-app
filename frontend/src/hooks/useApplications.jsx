@@ -18,7 +18,7 @@ export function useApplications() {
         if (!err || !err.message) {
             return "Something went wrong. Please try again."
         }
-        if (err.message.includes("Network")) {
+        if (err.message.includes("Network") || err.message.includes("Failed to fetch")) {
             return "Unable to connect. Check your internet or try again."
         }
         if (err.message.includes("Invalid response")) {
@@ -39,7 +39,9 @@ export function useApplications() {
             setApplications(data) 
         } catch (err) {
             console.log("HOOK ERROR:", err.message)
-            setError(mapErrorToMessage(err))
+            const userMessage = mapErrorToMessage(err)
+            setError(userMessage)
+            
         } finally {
             setLoading(false)
         }
@@ -52,6 +54,7 @@ export function useApplications() {
 
 
     async function addApplication (app) {
+        setLoading(true)
         setError(null)
         try {
             const data = await createApplication(app)
@@ -61,11 +64,14 @@ export function useApplications() {
             console.log("HOOK ERROR:", err.message)
             setError(mapErrorToMessage(err))
             
-        } 
+        } finally {
+            setLoading(false)
+        }
     }
 
 
      async function removeApplication (id) {
+        setLoading(true)
         setError(null)
         try {
             const data = await deleteApplication(id)
@@ -73,6 +79,8 @@ export function useApplications() {
        } catch (err){
             console.log("HOOK ERROR:", err.message)
             setError(mapErrorToMessage(err))
+       } finally {
+            setLoading(false)
        }
     }
 
@@ -86,13 +94,17 @@ export function useApplications() {
     // }
 
     async function updateApp (id, app) {
-       try {
+        setLoading(true)
+        setError(null)
+        try {
             const data = await updateApplication(id, app)
             setApplications(prev => prev.map(a => a.id === data.id? data : a))
        } catch (err){
             console.log("HOOK ERROR:", err.message)
             setError(mapErrorToMessage(err))
-       } 
+       } finally {
+        setLoading(false)
+       }
     }
 
     return {
