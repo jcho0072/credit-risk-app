@@ -23,20 +23,29 @@ function ApplicationForm({addApplication}){
         "OTHER"
     ]
 
+    const LOAN_INTENT_OPTIONS = [
+        "EDUCATION",
+        "MEDICAL",
+        "PERSONAL",
+        "VENTURE",
+        "HOMEIMPROVEMENT",
+        "DEBTCONSOLIDATION"
+    ]
+
     const LOAN_GRADE_OPTIONS = [
         "A",
         "B",
         "C",
         "D"
     ]
-
+    
     const validation = {
         person_name: value => value.trim().length >= 2,
         person_age: value => value > 18,
         person_income: value => value >= 18 && value <= 100,
-        person_home_ownership: value => allowed.includes(value),
+        person_home_ownership: value => HOME_OWNERSHIP_OPTIONS.includes(value),
         person_emp_length: value => value <= 50,
-        loan_intent: value => HOME_OWNERSHIP_OPTIONS.includes(value),
+        loan_intent: value => LOAN_INTENT_OPTIONS.includes(value),
         loan_grade: value => LOAN_GRADE_OPTIONS.includes(value),
         loan_amnt: value => value <= 100000,
         loan_int_rate: value => value <= 100,
@@ -76,8 +85,8 @@ function ApplicationForm({addApplication}){
         {name: "person_income", type:"number", placeholder:"Income"},
         {name: "person_home_ownership", placeholder:"Ownership"},
         {name: "person_emp_length", type:"number", placeholder:"Person Employee Length"},
-        {name: "loan_intent", placeholder:"Loan intent"},
-        {name: "loan_grade", placeholder:"Loan grade"},
+        {name: "loan_intent", type:"select", placeholder:"Loan intent", options:HOME_OWNERSHIP_OPTIONS},
+        {name: "loan_grade",type:"select", placeholder:"Loan grade", options:LOAN_GRADE_OPTIONS},
         {name: "loan_amnt", type:"number", placeholder:"Loan amount"},
         {name: "loan_int_rate", type:"number", placeholder:"Loan interest rate"},
         {name: "loan_percent_income", type:"number", placeholder:"Loan percent income"},
@@ -91,23 +100,34 @@ function ApplicationForm({addApplication}){
             <form className = "form" onSubmit={handleSubmit}>
 
                 {fields.map(f =>
-                <div key={f.name}>
+                    {
+                        if (f.type === "select") {
+                            return (
+                                <select
+                                    key={f.name}
+                                    name={f.name}
+                                    value={form[f.name]}
+                                    onChange={handleChange}
+                                >
 
-                    <label>
-                        {f.placeholder}
-                    </label>
+                                    <option value = "">Select option</option>
 
-                    <input
-                        name= {f.name}
-                        type={f.type || "text"}
-                        value={form[f.name]} 
-                        onChange={handleChange} 
-                        // placeholder={f.placeholder} 
-                    
-                    />
+                                    {f.options.map(option => (
+                                        <option key={option} value={option}></option>  
+                                    ))}
 
-                </div>
-                )}
+                                </select>
+                            )
+                        }
+                        return (
+                            <input
+                                key={f.name}
+                                name={f.name}
+                                type={f.type || "text"}
+                                value={form[f.name]}
+                                onChange={handleChange}
+                            />)
+                    })}
 
                     <button type="submit">
                         Add application
