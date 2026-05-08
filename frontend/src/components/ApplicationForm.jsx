@@ -116,6 +116,7 @@ function ApplicationForm({addApplication}){
                     {
                         if (f.type === "select") {       
                             return (
+                                <div key={f.name} className="form-field">
                                 <select
                                     key={f.name}
                                     name={f.name}
@@ -133,10 +134,14 @@ function ApplicationForm({addApplication}){
                                     ))}
 
                                 </select>
+                                </div>
+
+                                
                             )
                         }
 
                         return (
+                            <div key={f.name} className="form-field">
 
                             <input
                                 key={f.name}
@@ -145,12 +150,21 @@ function ApplicationForm({addApplication}){
                                 value={form[f.name]}
                                 onChange={handleChange}
                                 placeholder={f.placeholder}
-                            />)
+                            />
+                            
+                            {errors[f.name] && (
+                                <p>{errors[f.name]}</p>
+                            )}
+                            
+                            </div>
+                        )
                     })}
 
                     <button type="submit">
                         Add application
                     </button>
+
+                    
 
             </form>
         </div>
