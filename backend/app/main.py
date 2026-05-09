@@ -139,24 +139,16 @@ FIELD_VALIDATION = {
 
 
 def validate_application(data):
-    # Request type validation
-    if not request.is_json:
-         return jsonify({
-             "error": {
-                "message": "Request must be JSON",
-                "code": "INVALID_CONTENT_TYPE"}
-        }), 400 
-    
     # Missing field validation 
     missing = [field for field in REQUIRED_FIELDS if field not in data]
 
     if missing:
-        return jsonify({"error" : 
-                        {
-                            "message": "Missing required fields",
-                            "code": "MISSING_FIELDS"},
-                            "fields" : missing
-                        }), 400
+        return {"error" : 
+                    {
+                        "message": "Missing required fields",
+                        "code": "MISSING_FIELDS"},
+                        "fields" : missing
+                    }, 400
 
     
     data = request.get_json(silent=True)
@@ -196,10 +188,6 @@ def validate_application(data):
 
 
 
-
-
-
-
 # Methods
 @app.route("/applications", methods = ["GET"])
 def get_applications():
@@ -222,7 +210,16 @@ def get_applications():
 
 @app.route("/applications", methods=['POST'])
 def add_applications():
+    # Request type validation
+    if not request.is_json:
+         return jsonify({
+             "error": {
+                "message": "Request must be JSON",
+                "code": "INVALID_CONTENT_TYPE"}
+        }), 400 
+    
     data = request.get_json(silent=True)
+
 
     # JSON parsing validation 
     if data is None:
@@ -255,7 +252,14 @@ def add_applications():
         decision = result["decision"],
         risk = result["risk"]
     )
-        validate_application(data)
+        
+        validation_error = validate_application(data)
+
+        if validation_error:
+            return jsonify({
+                "data": None,
+                "error": validation_error
+            }), 400
         
         db.session.add(new_record)
         db.session.commit()
