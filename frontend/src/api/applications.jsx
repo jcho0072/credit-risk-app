@@ -8,21 +8,21 @@ const url = `${import.meta.env.VITE_API_URL}`;
 async function request(endpoint, options = {}) {
     try {
         const res = await fetch(`${url}${endpoint}`, options)
-
         let result
 
+        // JSON response 
         try{
             result = await res.json()
         } catch {
             throw new Error("Invalid response format from server")
         }
 
+        // HTTP error
         if (!res.ok) {
             throw new Error(
                 result.error?.message || "Request failed"
             )
         }
-
         return result.data
 
     // Handle network error

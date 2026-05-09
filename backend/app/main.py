@@ -93,7 +93,58 @@ class Financials(db.Model):
 with app.app_context():
     db.create_all()
 
+
+REQUIRED_FIELDS = [
+        "person_name",
+        "person_age",
+        "person_income",
+        "person_home_ownership",
+        "person_emp_length",
+        "loan_intent",
+        "loan_grade",
+        "loan_amnt",
+        "loan_int_rate",
+        "loan_percent_income",
+        "cb_person_default_on_file",
+        "cb_person_cred_hist_length"
+    ]
+
+
+def validate_application(data):
+    # Request type validation
+    if not request.is_json:
+         return jsonify({
+             "error": {
+                "message": "Request must be JSON",
+                "code": "INVALID_CONTENT_TYPE"}
+        }), 400 
     
+    # Missing field validation 
+    missing = [field for field in REQUIRED_FIELDS if field not in data]
+
+    if missing:
+        return jsonify({"error" : 
+                        {
+                            "message": "Missing required fields",
+                            "code": "MISSING_FIELDS"},
+                            "fields" : missing
+                        }), 400
+
+    try:
+        data = request.get_json(silent=True)
+
+         
+        if data is None:
+            return jsonify({
+                "data": None,
+                "error" :  
+                    {
+                        "message": "Invalid JSON",
+                        "code": "INVALID_CONTENT"
+                    }}), 400
+
+
+
 
 
 
@@ -119,41 +170,12 @@ def get_applications():
 
 @app.route("/applications", methods=['POST'])
 def add_applications():
-
-    # Request type validation
-    if not request.is_json:
-        return jsonify({"error" : "Request must be JSON"}), 400
-    
     data = request.get_json(silent=True)
-
 
     # JSON parsing validation 
     if data is None:
         return jsonify({"error" : "Invalid JSON"}), 400
-    
 
-    
-    required_fields = [
-        "person_name",
-        "person_age",
-        "person_income",
-        "person_home_ownership",
-        "person_emp_length",
-        "loan_intent",
-        "loan_grade",
-        "loan_amnt",
-        "loan_int_rate",
-        "loan_percent_income",
-        "cb_person_default_on_file",
-        "cb_person_cred_hist_length"
-    ]
-
-    # Missing field validation 
-    missing = [field for field in required_fields if field not in data]
-
-    if missing:
-        return jsonify({"error" : "Missing required fields",
-                        "fields" : missing}), 400
     
 
     # Data type validation
@@ -199,11 +221,8 @@ def add_applications():
         risk = result["risk"]
     )
         
-
         db.session.add(new_record)
         db.session.commit()
-
-        print(jsonify({"success":"successful addition"}), 201)
 
         return jsonify(new_record.to_dict()), 201
         
