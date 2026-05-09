@@ -109,6 +109,34 @@ REQUIRED_FIELDS = [
         "cb_person_cred_hist_length"
     ]
 
+FIELD_TYPES = {
+    "person_name": str,
+    "person_age": int,
+    "person_income": int,
+    "loan_int_rate": float,
+    "loan_grade": str,
+    "loan_amnt": int,
+    "loan_int_rate": float,
+    "loan_percent_income": float,
+    "cb_person_default_on_file": str,
+    "cb_person_cred_hist_length": int
+}
+
+FIELD_VALIDATION = {
+    "person_name": lambda value: isinstance(value, str),
+    "person_age": lambda value: value >= 18,
+    "person_income": lambda value: value > 0,
+    "person_home_ownership": lambda value: isinstance(value, str),
+    "person_emp_length": lambda value: value > 0,
+    "loan_intent": lambda value: isinstance(value, str),
+    "loan_grade": lambda value: isinstance(value, str),
+    "loan_amnt": lambda value: value >= 0 and value <= 100000,
+    "loan_int_rate": lambda value: value <= 100,
+    "loan_percent_income": lambda value: value <= 1,
+    "cb_person_default_on_file": lambda value: isinstance(value, str),
+    "cb_person_cred_hist_length": lambda value: value >= 0
+}
+
 
 def validate_application(data):
     # Request type validation
@@ -130,18 +158,42 @@ def validate_application(data):
                             "fields" : missing
                         }), 400
 
-    try:
-        data = request.get_json(silent=True)
+    
+    data = request.get_json(silent=True)
 
-         
-        if data is None:
+        
+    if data is None:
+        return jsonify({
+            "data": None,
+            "error" :  
+                {
+                    "message": "Invalid JSON",
+                    "code": "INVALID_CONTENT"
+                }}), 400
+    
+    for field, expected_type in FIELD_TYPES.items():
+        if not isinstance(data[field], expected_type):
             return jsonify({
-                "data": None,
-                "error" :  
-                    {
-                        "message": "Invalid JSON",
-                        "code": "INVALID_CONTENT"
-                    }}), 400
+            "data": None,
+            "error": {
+                "message": f"{field} has invalid type",
+                "field": field,
+                "code": "INVALID_TYPE"
+            }
+        }), 400
+
+    for field, validator in FIELD_VALIDATION.items():
+        if not validator(data[field]):
+            return jsonify({
+        "data": None,
+        "error": {
+            "message": f"{field} is of invalid value or range",
+            "field": field,
+            "code": "INVALID_VALUE"
+        }
+    }), 400
+
+
 
 
 
@@ -176,23 +228,6 @@ def add_applications():
     if data is None:
         return jsonify({"error" : "Invalid JSON"}), 400
 
-    
-
-    # Data type validation
-    if not isinstance(data["person_name"], str) or not data["person_name"].strip():
-        return jsonify({"error": "person_name must be a string"}), 400
-    if not isinstance(data["person_age"], int):
-         return jsonify({"error": "person_age must be an integer"}), 400
-    
-
-    # Value validation
-    if data["loan_amnt"] <= 0:
-         return jsonify({"error": "Value cannot be below 0"}), 400
-    if data["loan_int_rate"] <= 0:
-         return jsonify({"error": "Value cannot be below 0"}), 400
-    if data["loan_percent_income"] <= 0:
-         return jsonify({"error": "Value cannot be below 0"}), 400
-
 
     try:
         result = run_prediction(data)
@@ -220,6 +255,7 @@ def add_applications():
         decision = result["decision"],
         risk = result["risk"]
     )
+        validate_application(data)
         
         db.session.add(new_record)
         db.session.commit()
