@@ -102,11 +102,17 @@ with app.app_context():
 def get_applications():
     try:
         applications = Financials.query.all()
-        return jsonify([record.to_dict() for record in applications]), 200
+        return jsonify({
+                "data": [record.to_dict() for record in applications],
+                "error": None
+            }), 200
     
     except Exception as e:
         return jsonify({
-            "error:" "Failed to fetch application"
+            "data": None,
+            "error": {
+                "message": "Failed to fetch application",
+                "code": "FETCH_ERROR"}
         }), 500
 
 

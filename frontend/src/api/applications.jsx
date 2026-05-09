@@ -9,22 +9,21 @@ async function request(endpoint, options = {}) {
     try {
         const res = await fetch(`${url}${endpoint}`, options)
 
-        // Handle HTTP errors
-        if (!res.ok) {
-            let errorMessage = "Request failed"
-            try {
-                const errorData = await res.json()
-                errorMessage = errorData.error || errorMessage
-            } catch {}
-            throw new Error(errorMessage)
-        }
+        let result
 
-        // Handle JSON parsing
-        try {
-            return await res.json()
+        try{
+            result = await res.json()
         } catch {
             throw new Error("Invalid response format from server")
         }
+
+        if (!res.ok) {
+            throw new Error(
+                result.error?.message || "Request failed"
+            )
+        }
+
+        return result.data
 
     // Handle network error
     } catch (err) {

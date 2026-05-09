@@ -50,6 +50,13 @@ button:hover {
   width: 150px;   
 }
 
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
 .display {
   display: flex;
   flex-direction: column;

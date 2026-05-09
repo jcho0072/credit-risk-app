@@ -55,6 +55,21 @@ function ApplicationForm({addApplication}){
 
     }
 
+    const validationMessages = {
+        person_name: "Name must not be blank",
+        person_age: "Age must be between 18 and 100",
+        person_income: "Income must not be 0",
+        person_home_ownership: "Home ownership option must not be empty",
+        person_emp_length: "Employee length must not be 0",
+        loan_intent: "Loan intent must not be empty",
+        loan_grade: "Loan grade must not be empty",
+        loan_amnt: "Loan amount must be less than 100k",
+        loan_int_rate: "Interest must be less than 100 percent",
+        loan_percent_income: "Cannot exceed 1",
+        cb_person_default_on_file: "Cannot be empty",
+        cb_person_cred_hist_length: "Credit history must not be empty"
+}
+
     const [form, setForm] = useState(initialState)
     const [errors, setErrors] = useState({})
        
@@ -65,6 +80,13 @@ function ApplicationForm({addApplication}){
             ...prev,
             [name]: type === "number" ? Number(value) : value
         }))
+
+        if (errors) {
+            setErrors(prev => ({
+                ...prev,
+                [name]:""
+            }))
+        }
     }
 
     function handleSubmit(e) {
@@ -76,7 +98,7 @@ function ApplicationForm({addApplication}){
             const isValid = validation[field](form[field])
 
             if (!isValid) {
-                newErrors[field] = `Invalid ${field}`
+                newErrors[field] = validationMessages[field]
             }
         })
 
