@@ -149,41 +149,38 @@ def validate_application(data):
                         "code": "MISSING_FIELDS"},
                         "fields" : missing
                     }, 400
-
-    
-    data = request.get_json(silent=True)
-
         
     if data is None:
-        return jsonify({
+        return {
             "data": None,
             "error" :  
                 {
                     "message": "Invalid JSON",
                     "code": "INVALID_CONTENT"
-                }}), 400
+                }}, 400
     
+
     for field, expected_type in FIELD_TYPES.items():
         if not isinstance(data[field], expected_type):
-            return jsonify({
+            return {
             "data": None,
             "error": {
                 "message": f"{field} has invalid type",
                 "field": field,
                 "code": "INVALID_TYPE"
             }
-        }), 400
+        }, 400
 
     for field, validator in FIELD_VALIDATION.items():
         if not validator(data[field]):
-            return jsonify({
-        "data": None,
-        "error": {
-            "message": f"{field} is of invalid value or range",
-            "field": field,
-            "code": "INVALID_VALUE"
-        }
-    }), 400
+            return {
+            "data": None,
+            "error": {
+                "message": f"{field} is of invalid value or range",
+                "field": field,
+                "code": "INVALID_VALUE"
+            }
+        }, 400
 
 
 
@@ -269,7 +266,14 @@ def add_applications():
     
     except Exception as e:
         db.session.rollback()
-        return jsonify({"error":"Failed to create application"}), 500
+        return jsonify({"error":
+                        {
+                            "data": None,
+                            "message":"Failed to create application",
+                            "code":"CREATE_ERROR"
+                        }
+                        
+                        }), 500
 
 
 
