@@ -220,7 +220,12 @@ def add_applications():
 
     # JSON parsing validation 
     if data is None:
-        return jsonify({"error" : "Invalid JSON"}), 400
+        return jsonify({"error" : 
+                        {
+                            "message": "No JSON Detected",
+                            "code": "INVALID_JSON"
+                         }
+                    }), 400
 
 
     try:
@@ -266,7 +271,8 @@ def add_applications():
     
     except Exception as e:
         db.session.rollback()
-        return jsonify({"error":
+        return jsonify(
+            {"error":
                         {
                             "data": None,
                             "message":"Failed to create application",
@@ -282,7 +288,13 @@ def delete_applications(id):
     application = Financials.query.get(id)
 
     if not application:
-        return jsonify({"error":"Not found"}), 404
+        return jsonify({
+            "data": None,
+            "error": {
+                "message": "Application not found",
+                "code": "NOT_FOUND"
+            }
+        }), 404
 
     db.session.delete(application)
     db.session.commit()
