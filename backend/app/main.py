@@ -137,6 +137,15 @@ FIELD_VALIDATION = {
     "cb_person_cred_hist_length": lambda value: value >= 0
 }
 
+RESULT_FIELD_MAPPING = {
+    "pred_probability": "probability",
+    "pred_status": "loan_status",
+    "expected_loss": "expected_loss",
+    "threshold": "threshold",
+    "decision": "decision",
+    "risk": "risk"
+}
+
 
 def validate_application(data):
     # Missing field validation 
@@ -164,12 +173,12 @@ def validate_application(data):
         if not isinstance(data[field], expected_type):
             return {
             "data": None,
-            "error": {
+            "error": 
+                {
                 "message": f"{field} has invalid type",
                 "field": field,
                 "code": "INVALID_TYPE"
-            }
-        }, 400
+                }}, 400
 
     for field, validator in FIELD_VALIDATION.items():
         if not validator(data[field]):
@@ -231,6 +240,14 @@ def add_applications():
     try:
         result = run_prediction(data)
 
+        validation_error = validate_application(data)
+
+        if validation_error:
+            return jsonify({
+                "data": None,
+                "error": validation_error
+            }), 400
+
         new_record = Financials(
         person_name = data["person_name"],
         person_age = data["person_age"],
@@ -255,31 +272,24 @@ def add_applications():
         risk = result["risk"]
     )
         
-        validation_error = validate_application(data)
-
-        if validation_error:
-            return jsonify({
-                "data": None,
-                "error": validation_error
-            }), 400
-        
         db.session.add(new_record)
         db.session.commit()
 
-        return jsonify(new_record.to_dict()), 201
+        return jsonify({
+            "data": new_record.to_dict(),
+            "error": None
+        }), 201
         
     
     except Exception as e:
         db.session.rollback()
         return jsonify(
-            {"error":
+            {   "data": None,
+                "error":
                         {
-                            "data": None,
                             "message":"Failed to create application",
                             "code":"CREATE_ERROR"
-                        }
-                        
-                        }), 500
+                        }}), 500
 
 
 
@@ -317,49 +327,60 @@ def delete_applications(id):
 
 @app.route("/applications/<int:id>", methods = ['PUT'])
 def update_applications(id):
-    data = request.json
-    if not data:
-        return jsonify({"error " : "Invalid data"}), 400
+    # Request type validation
+    if not request.is_json:
+         return jsonify({
+             "error": {
+                "message": "Request must be JSON",
+                "code": "INVALID_CONTENT_TYPE"}
+        }), 400 
+    
+    data = request.get_json(silent=True)
 
+    # JSON parsing validation 
+    if data is None:
+        return jsonify({"error" : 
+                        {
+                            "message": "No JSON Detected",
+                            "code": "INVALID_JSON"
+                         }
+                    }), 400
+    
+    validation_error = validate_application(data)
+
+    if validation_error:
+            return jsonify({
+                "data": None,
+                "error": validation_error
+            }), 400
 
     application = Financials.query.get(id)
+
     if not application:
-        return jsonify({"error":"Not found"}), 404
-
-
-    allowed_fields = [
-        "person_name",
-        "person_age",
-        "person_income",
-        "person_home_ownership",
-        "person_emp_length",
-        "loan_intent",
-        "loan_grade",
-        "loan_amnt",
-        "loan_int_rate",
-        "loan_percent_income",
-        "cb_person_default_on_file",
-        "cb_person_cred_hist_length"
-    ]
-
-
-    for field in allowed_fields:
-        if field in data:
-            setattr(application, field, data[field])
+        return jsonify({
+            "data": None,
+            "error": {
+                "message": "Application not found",
+                "code": "NOT_FOUND"
+            }
+        }), 404    
 
 
     result = run_prediction(data)
 
-    application.pred_probability = result["probability"]
-    application.pred_status = result["loan_status"]
-    application.expected_loss = result["expected_loss"]
-    application.threshold = result["expected_loss"]
-    application.decision = result["decision"]
-    application.risk = result["risk"]
+    for field, value in RESULT_FIELD_MAPPING.items():
+        setattr(
+            application,
+            field,
+            result[value]
+        )
 
     db.session.commit()
 
-    return jsonify(application.to_dict()), 201
+    return jsonify({
+            "data": application.to_dict(),
+            "error": None
+        }), 201
 
 
 

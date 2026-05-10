@@ -61,7 +61,6 @@ export function useApplications() {
             setApplications(prev => [...prev, data])
             
         } catch (err) {
-            
             setError(mapErrorToMessage(err))
             
         } finally {

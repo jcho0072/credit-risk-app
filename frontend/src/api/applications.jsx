@@ -13,6 +13,7 @@ async function request(endpoint, options = {}) {
         // JSON response 
         try{
             result = await res.json()
+            
         } catch {
             throw new Error("Invalid response format from server")
         }
