@@ -11,6 +11,12 @@ import {getApplications,
 
 export function useApplications() {
     const [applications, setApplications] = useState([])
+
+    const [page, setPage] = useState(1)
+    const [limit, setLimit] = useState(20)
+    const [totalPages, setTotalPages] = useState(0)
+    const [totalCount, setTotalCount] = useState(0)
+    
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
 

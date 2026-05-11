@@ -198,9 +198,23 @@ def validate_application(data):
 @app.route("/applications", methods = ["GET"])
 def get_applications():
     try:
-        applications = Financials.query.all()
+        page = request.args.get("page", 1, type=int)
+        limit = request.args.get("limit", 20, type=int)
+
+        applications = (
+            Financials.query
+            .offset((page - 1) * limit)
+            .limit(limit)
+            .all()
+        )
         return jsonify({
                 "data": [record.to_dict() for record in applications],
+                "pagination": {
+                    "page":1,
+                    "limit":20,
+                    "totalPages":15,
+                    "totalCount": 287
+                },
                 "error": None
             }), 200
     
