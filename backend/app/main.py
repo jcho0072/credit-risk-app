@@ -348,6 +348,7 @@ def update_applications(id):
     
     validation_error = validate_application(data)
 
+    # Field Validation handling
     if validation_error:
             return jsonify({
                 "data": None,
@@ -365,6 +366,9 @@ def update_applications(id):
             }
         }), 404    
 
+    for field in REQUIRED_FIELDS:
+        setattr(application, field, data[field])
+
 
     result = run_prediction(data)
 
@@ -380,7 +384,7 @@ def update_applications(id):
     return jsonify({
             "data": application.to_dict(),
             "error": None
-        }), 201
+        }), 200
 
 
 

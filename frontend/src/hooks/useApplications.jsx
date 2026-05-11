@@ -91,7 +91,7 @@ export function useApplications() {
     //     setError(err)
     //     }
     // }
-
+    
     async function updateApp (id, app) {
         setLoading(true)
         setError(null)
