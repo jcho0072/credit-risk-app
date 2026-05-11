@@ -13,7 +13,7 @@ export function useApplications() {
     const [applications, setApplications] = useState([])
 
     const [page, setPage] = useState(1)
-    const [limit, setLimit] = useState(20)
+    const [limit, setLimit]= useState(20)
     const [totalPages, setTotalPages] = useState(0)
     const [totalCount, setTotalCount] = useState(0)
 
@@ -41,12 +41,13 @@ export function useApplications() {
         setError(null)
 
         try {
-            const result = await getApplications();
-            setApplications(result.data)
+            const result = await getApplications(page,limit);
 
             if (!Array.isArray(result.data)) {
                 throw new Error("Invalid data format")
             }
+
+            setApplications(result.data)
 
             setTotalPages(result.pagination.totalPages)
             setTotalCount(result.pagination.totalCount)
@@ -63,7 +64,7 @@ export function useApplications() {
 
     useEffect(() => {
         loadApplications()
-    }, [])
+    }, [page, limit])
 
 
     async function addApplication (app) {
