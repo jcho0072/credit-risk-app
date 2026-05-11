@@ -2,10 +2,14 @@ import {useState} from "react"
 import {useEffect} from "react"
 
 import {fields} from "../config/applicationFields"
+import {validation,
+        validationMessages
+} from "../config/applicationValidation"
 
 function ApplicationItem({application, deleteApplication, updateApplication}){
     const [editing,setEditing] = useState(false)
     const [form,setForm] = useState(application)
+    const [errors, setErrors] = useState({})
 
     useEffect(() => {
         setForm(application)
@@ -14,65 +18,110 @@ function ApplicationItem({application, deleteApplication, updateApplication}){
     function handleChange(e){
         const {name, value, type} = e.target
 
-        setForm(prev => ({
+         setForm(prev => ({
             ...prev,
-            [name]: type === "number"
-                 ? value === "" ? "" : Number(value)
-                 : value
+            [name]: type === "number" ? Number(value) : value
         }))
+
+        if (errors) {
+            setErrors(prev => ({
+                ...prev,
+                [name]:""
+            }))
+        }
     }
 
-    // const fields = [
-    //     {name:"person_name", placeholder:"Name"},
-    //     {name:"person_age", type:"number", placeholder:"Age"},
-    //     {name: "person_income", type:"number", placeholder:"Income"},
-    //     {name: "person_home_ownership", placeholder:"Ownership"},
-    //     {name: "person_emp_length", type:"number", placeholder:"Person Employee Length"},
-    //     {name: "loan_intent", placeholder:"Loan intent"},
-    //     {name: "loan_grade", placeholder:"Loan grade"},
-    //     {name: "loan_amnt", type:"number", placeholder:"Loan amount"},
-    //     {name: "loan_int_rate", type:"number", placeholder:"Loan interest rate"},
-    //     {name: "loan_percent_income", type:"number", placeholder:"Loan percent income"},
-    //     {name: "cb_person_default_on_file", placeholder:"Has Ever Defaulted?"},
-    //     {name: "cb_person_cred_hist_length", type:"number", placeholder:"Credit history"} 
-    // ]
+    function handleSubmit(e) {
+        e.preventDefault() // prevent page reload
+
+        const newErrors = {}
+
+        Object.keys(validation).forEach(field => {
+            const isValid = validation[field](form[field])
+
+            if (!isValid) {
+                newErrors[field] = validationMessages[field]
+            }
+        })
+
+        if (Object.keys(newErrors).length > 0){
+            setErrors(newErrors)
+            console.log("Error confirmed")
+            return
+        }
+
+        setErrors({})
+
+        updateApplication(application.id, form)
+        setEditing(false)
+    }
     
 
     return (
             <li>
                 {(editing ? (
                     <>
-
                     <div>
-                        <form className = "form">
-                            {fields.map(f =>
-                    <div key={f.name}>
-                    
-                    <label>
-                        {f.placeholder}
-                    </label>
+                        <form className = "form" onSubmit={handleSubmit}>
 
-                    <input
-                        name= {f.name}
-                        type={f.type || "text"}
-                        value={form[f.placeholder]} 
-                        onChange={handleChange} 
-                        // placeholder={f.placeholder} 
-                    
-                    />
+                            {fields.map(f => {
+                                if (f.type === "select") {
+                                    return ( 
+                                    <div key={f.name} className="form-field">
+                                        
+                                    <select
+                                    key={f.name}
+                                    name={f.name}
+                                    value={form[f.name]}
+                                    onChange={handleChange}
+                                    placeholder={f.placeholder}
+                                >
 
+                                    <option value = "">Select option</option>
+
+                                     {f.options.map(option => (
+                                        <option key={option} value={option}>
+                                            {option}
+                                        </option>
+                                     ))}
+
+                                </select>
+                                </div>
+                                
+                                    )
+                                }
+
+                                return (
+                                    <div key={f.name} className="form-field">
+
+                                        <label>
+                                            {f.placeholder}
+                                        </label>
+
+                                    <input
+                                    key={f.name}
+                                    name={f.name}
+                                    type={f.type || "text"}
+                                    value={form[f.name]}
+                                    onChange={handleChange}
+                                    placeholder={f.placeholder}
+                                />
+
+                                    {errors[f.name] && (
+                                        <p>{errors[f.name]}</p>
+                                    )}
+
+                                    </div>
+                                )
+                            },
+
+            )}
+                        <button type="submit">
+                            Save
+                        </button>
+                    </form>
                 </div>
-                )}
-                        </form>
-                    </div>
 
-
-                <button onClick={() => {
-                    updateApplication(application.id, form)
-                    setEditing(false)
-                }}>
-                    Save
-                </button>
 
                     </>
                 ): (

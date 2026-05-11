@@ -91,7 +91,7 @@ export function useApplications() {
     //     setError(err)
     //     }
     // }
-    
+
     async function updateApp (id, app) {
         setLoading(true)
         setError(null)
@@ -103,7 +103,7 @@ export function useApplications() {
             setError(mapErrorToMessage(err))
        } finally {
         setLoading(false)
-       }
+       }    
     }
 
     return {

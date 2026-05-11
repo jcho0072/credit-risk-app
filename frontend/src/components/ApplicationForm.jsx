@@ -70,6 +70,11 @@ function ApplicationForm({addApplication}){
                         if (f.type === "select") {       
                             return (
                                 <div key={f.name} className="form-field">
+                                    
+                                <label>
+                                    {f.placeholder}
+                                </label>
+
                                 <select
                                     key={f.name}
                                     name={f.name}
@@ -96,13 +101,17 @@ function ApplicationForm({addApplication}){
                         return (
                             <div key={f.name} className="form-field">
 
+                                <label>
+                                    {f.placeholder}
+                                </label>
+
                             <input
                                 key={f.name}
                                 name={f.name}
                                 type={f.type || "text"}
                                 value={form[f.name]}
                                 onChange={handleChange}
-                                placeholder={f.placeholder}
+                                // placeholder={f.placeholder}
                             />
                             
                             {errors[f.name] && (
