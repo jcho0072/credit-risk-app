@@ -113,7 +113,7 @@ function ApplicationItem({application, deleteApplication, updateApplication}){
 
                                     </div>
                                 )
-                            },
+                            }
 
             )}
                         <button type="submit">
