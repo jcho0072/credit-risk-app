@@ -48,15 +48,10 @@ export function useApplications() {
                 throw new Error("Invalid data format")
             }
 
-            setPage(result.pagination.page)
-            setLimit(result.pagination.limit)
             setTotalPages(result.pagination.totalPages)
             setTotalCount(result.pagination.totalCount)
 
-            
-
         } catch (err) {
-            
             const userMessage = mapErrorToMessage(err)
             setError(userMessage)
             
