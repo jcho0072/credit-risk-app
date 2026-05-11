@@ -20,10 +20,12 @@ function ApplicationItem({application, deleteApplication, updateApplication}){
 
          setForm(prev => ({
             ...prev,
-            [name]: type === "number" ? Number(value) : value
+            [name]:type === "number"
+            ? value === "" ? "" : Number(value)
+            : value
         }))
 
-        if (errors) {
+        if (errors[name]) {
             setErrors(prev => ({
                 ...prev,
                 [name]:""
@@ -70,7 +72,6 @@ function ApplicationItem({application, deleteApplication, updateApplication}){
                                     <div key={f.name} className="form-field">
                                         
                                     <select
-                                    key={f.name}
                                     name={f.name}
                                     value={form[f.name]}
                                     onChange={handleChange}
@@ -99,7 +100,6 @@ function ApplicationItem({application, deleteApplication, updateApplication}){
                                         </label>
 
                                     <input
-                                    key={f.name}
                                     name={f.name}
                                     type={f.type || "text"}
                                     value={form[f.name]}

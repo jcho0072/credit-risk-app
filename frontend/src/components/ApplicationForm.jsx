@@ -23,10 +23,12 @@ function ApplicationForm({addApplication}){
 
         setForm(prev => ({
             ...prev,
-            [name]: type === "number" ? Number(value) : value
+            [name]:type === "number"
+            ? value === "" ? "" : Number(value)
+            : value
         }))
 
-        if (errors) {
+        if (errors[name]) {
             setErrors(prev => ({
                 ...prev,
                 [name]:""
