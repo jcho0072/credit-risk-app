@@ -33,8 +33,8 @@ async function request(endpoint, options = {}) {
 }
 
 
-export async function getApplications() {
-    return request("/applications", {
+export async function getApplications(page, limit) {
+    return request(`/applications?page=${page}&limit=${limit}`, {
         method: "GET"
     })
 }

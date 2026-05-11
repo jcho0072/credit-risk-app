@@ -16,7 +16,7 @@ export function useApplications() {
     const [limit, setLimit] = useState(20)
     const [totalPages, setTotalPages] = useState(0)
     const [totalCount, setTotalCount] = useState(0)
-    
+
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
 
@@ -41,8 +41,20 @@ export function useApplications() {
         setError(null)
 
         try {
-            const data = await getApplications();
-            setApplications(data) 
+            const result = await getApplications();
+            setApplications(result.data)
+
+            if (!Array.isArray(result.data)) {
+                throw new Error("Invalid data format")
+            }
+
+            setPage(result.pagination.page)
+            setLimit(result.pagination.limit)
+            setTotalPages(result.pagination.totalPages)
+            setTotalCount(result.pagination.totalCount)
+
+            
+
         } catch (err) {
             
             const userMessage = mapErrorToMessage(err)
@@ -63,8 +75,8 @@ export function useApplications() {
         setLoading(true)
         setError(null)
         try {
-            const data = await createApplication(app)
-            setApplications(prev => [...prev, data])
+            const result = await createApplication(app)
+            setApplications(prev => [...prev, result])
             
         } catch (err) {
             setError(mapErrorToMessage(err))
@@ -79,7 +91,7 @@ export function useApplications() {
         setLoading(true)
         setError(null)
         try {
-            const data = await deleteApplication(id)
+            const result = await deleteApplication(id)
             setApplications((prev) => prev.filter(t => t.id !== id))
        } catch (err){
             
@@ -102,8 +114,8 @@ export function useApplications() {
         setLoading(true)
         setError(null)
         try {
-            const data = await updateApplication(id, app)
-            setApplications(prev => prev.map(a => a.id === data.id? data : a))
+            const result = await updateApplication(id, app)
+            setApplications(prev => prev.map(a => a.id === result.id? result : a))
        } catch (err){
             
             setError(mapErrorToMessage(err))

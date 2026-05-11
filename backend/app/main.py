@@ -9,6 +9,7 @@ from backend.app.config.paths import DATABASE_URL
 
 import os
 import joblib
+import math
 import pandas as pd
 
 from dotenv import load_dotenv
@@ -196,7 +197,7 @@ def validate_application(data):
 
 # Methods
 @app.route("/applications", methods = ["GET"])
-def get_applications():
+def get_applications(page, limit):
     try:
         page = request.args.get("page", 1, type=int)
         limit = request.args.get("limit", 20, type=int)
@@ -207,13 +208,17 @@ def get_applications():
             .limit(limit)
             .all()
         )
+
+        total_count = Financials.query.count()
+        total_pages = math.ceil(total_count/limit)
+
         return jsonify({
                 "data": [record.to_dict() for record in applications],
                 "pagination": {
-                    "page":1,
-                    "limit":20,
-                    "totalPages":15,
-                    "totalCount": 287
+                    "page":page,
+                    "limit":limit,
+                    "totalPages":total_pages,
+                    "totalCount": total_count
                 },
                 "error": None
             }), 200
