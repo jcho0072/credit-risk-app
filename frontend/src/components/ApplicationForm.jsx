@@ -92,8 +92,13 @@ function ApplicationForm({addApplication}){
                                             {option}
                                         </option>  
                                     ))}
-
+                                    
                                 </select>
+
+                                {errors[f.name] && (
+                                        <p>{errors[f.name]}</p>
+                                    )}
+
                                 </div>
 
                                 

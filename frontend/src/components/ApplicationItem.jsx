@@ -86,6 +86,10 @@ function ApplicationItem({application, deleteApplication, updateApplication}){
                                         </option>
                                      ))}
 
+                                     {errors[f.name] && (
+                                        <p>{errors[f.name]}</p>
+                                    )}
+
                                 </select>
                                 </div>
                                 
@@ -107,15 +111,18 @@ function ApplicationItem({application, deleteApplication, updateApplication}){
                                     placeholder={f.placeholder}
                                 />
 
-                                    {errors[f.name] && (
-                                        <p>{errors[f.name]}</p>
-                                    )}
+                                {errors[f.name] && (
+                                    <p>{errors[f.name]}</p>
+                                )}
+                                    
 
                                     </div>
+
                                 )
                             }
 
             )}
+
                         <button type="submit">
                             Save
                         </button>
