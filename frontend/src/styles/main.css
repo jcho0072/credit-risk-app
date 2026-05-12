@@ -60,13 +60,15 @@ button:hover {
 .display {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 20px;
   min-width: 250px;
   justify-content: center;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 16px;
   background: #fff;
+  margin-top: 70px;
+    
 }
 
 

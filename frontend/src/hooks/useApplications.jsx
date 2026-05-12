@@ -90,9 +90,8 @@ export function useApplications() {
         setError(null)
         try {
             const result = await deleteApplication(id)
-            setApplications((prev) => prev.filter(t => t.id !== id))
+            // setApplications((prev) => prev.filter(t => t.id !== id))
        } catch (err){
-            
             setError(mapErrorToMessage(err))
        } finally {
             setLoading(false)
