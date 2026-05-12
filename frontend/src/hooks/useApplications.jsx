@@ -122,8 +122,18 @@ export function useApplications() {
 
     return {
         applications,
+        
         loading,
         error,
+        
+        page,
+        limit,
+        totalPages,
+        totalCount,
+
+        setPage,
+        setLimit,
+
         addApplication,
         deleteApplication: removeApplication,
         updateApplication: updateApp
