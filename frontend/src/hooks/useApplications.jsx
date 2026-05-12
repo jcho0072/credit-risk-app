@@ -48,8 +48,12 @@ export function useApplications() {
             }
 
             setApplications(result.data)
-
             setTotalPages(result.pagination.totalPages)
+
+            if (result.pagination.page > result.pagination.totalPages){
+                setPage(result.pagination.totalPages)
+            }
+            
             setTotalCount(result.pagination.totalCount)
 
         } catch (err) {
@@ -88,6 +92,7 @@ export function useApplications() {
         setError(null)
         try {
             await deleteApplication(id)
+            
             await loadApplications()
             // setApplications((prev) => prev.filter(t => t.id !== id))
        } catch (err){
