@@ -13,7 +13,7 @@ export function useApplications() {
     const [applications, setApplications] = useState([])
 
     const [page, setPage] = useState(1)
-    const [limit, setLimit]= useState(20)
+    const [limit, setLimit]= useState(4)
     const [totalPages, setTotalPages] = useState(0)
     const [totalCount, setTotalCount] = useState(0)
 
@@ -41,9 +41,7 @@ export function useApplications() {
         setError(null)
 
         try {
-            const result = await getApplications();
-
-            console.log(result)
+            const result = await getApplications(page, limit)
 
             if (!Array.isArray(result.data)) {
                 throw new Error("Invalid data format")
@@ -73,8 +71,8 @@ export function useApplications() {
         setLoading(true)
         setError(null)
         try {
-            const result = await createApplication(app)
-            setApplications(prev => [...prev, result])
+            await createApplication(app)
+            await loadApplications()
             
         } catch (err) {
             setError(mapErrorToMessage(err))
@@ -89,7 +87,8 @@ export function useApplications() {
         setLoading(true)
         setError(null)
         try {
-            const result = await deleteApplication(id)
+            await deleteApplication(id)
+            await loadApplications()
             // setApplications((prev) => prev.filter(t => t.id !== id))
        } catch (err){
             setError(mapErrorToMessage(err))
