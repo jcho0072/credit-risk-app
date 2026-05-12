@@ -197,7 +197,7 @@ def validate_application(data):
 
 # Methods
 @app.route("/applications", methods = ["GET"])
-def get_applications(page, limit):
+def get_applications():
     try:
         page = request.args.get("page", 1, type=int)
         limit = request.args.get("limit", 20, type=int)

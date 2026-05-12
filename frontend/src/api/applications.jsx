@@ -24,7 +24,7 @@ async function request(endpoint, options = {}) {
                 result.error?.message || "Request failed"
             )
         }
-        return result.data
+        return result
 
     // Handle network error
     } catch (err) {

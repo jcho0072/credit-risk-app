@@ -41,7 +41,9 @@ export function useApplications() {
         setError(null)
 
         try {
-            const result = await getApplications(page,limit);
+            const result = await getApplications();
+
+            console.log(result)
 
             if (!Array.isArray(result.data)) {
                 throw new Error("Invalid data format")
@@ -53,7 +55,7 @@ export function useApplications() {
             setTotalCount(result.pagination.totalCount)
 
         } catch (err) {
-            const userMessage = mapErrorToMessage(err)
+            const userMessage = mapErrorToMessage(err)  
             setError(userMessage)
             
         } finally {

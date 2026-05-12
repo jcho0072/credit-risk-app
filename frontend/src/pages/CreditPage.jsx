@@ -9,8 +9,18 @@ function CreditPage(){
 
     const {
         applications,
+
         loading,
         error,
+
+        page,
+        limit,
+        totalPages,
+        totalCount,
+
+        setPage,
+        setLimit,
+
         addApplication,
         deleteApplication,
         updateApplication
@@ -42,6 +52,24 @@ function CreditPage(){
                     deleteApplication={deleteApplication}
                     updateApplication={updateApplication}    
                     />
+
+                    <div className="pagination">
+
+                    <button disabled={page === 1}
+                            onClick={() => setPage(prev => prev - 1)}>
+                        Previous
+                    </button>
+
+                    <span>
+                        Page {page} of {totalPages}
+                    </span>
+
+                    <button disabled={page === totalPages}
+                            onClick={() => setPage(prev => prev + 1)}>
+                        Next
+                    </button>
+
+                    </div>
                 </div>
                 
                 
