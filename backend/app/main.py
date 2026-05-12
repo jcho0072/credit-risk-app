@@ -202,6 +202,13 @@ def get_applications():
         page = request.args.get("page", 1, type=int)
         limit = request.args.get("limit", 4, type=int)
 
+        if page < 1:
+            page = 1
+        if limit < 1:
+            limit = 1
+        if limit > 100:
+            limit = 100
+
         applications = (
             Financials.query
             .offset((page - 1) * limit)
