@@ -1,4 +1,3 @@
-# backend/app/config/paths.py
 from pathlib import Path
 
 import os

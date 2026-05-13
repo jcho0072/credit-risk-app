@@ -73,13 +73,16 @@ export function useApplications() {
         loadApplications()
     }, [page, limit, search])
 
+
     useEffect(() => {
         const timer = setTimeout(() => {
             setSearch(searchInput)
             setPage(1)
         }, 500)
         
-        return () => clearTimeout(timer)
+        return () => {
+            clearTimeout(timer)
+        }
     }, [searchInput])
 
     
