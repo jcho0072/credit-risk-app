@@ -17,7 +17,7 @@ load_dotenv()
 
 app = Flask(__name__, static_folder="../../frontend/dist", static_url_path="/")
 
-CORS(app, origins= ["https://credit-risk-app-vwc5.onrender.com"])
+CORS(app)
 
 # @app.route("/")
 # def serve():
