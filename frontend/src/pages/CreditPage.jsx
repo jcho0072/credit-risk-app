@@ -15,11 +15,15 @@ function CreditPage(){
 
         page,
         limit,
+        search,
+        searchInput,
         totalPages,
         totalCount,
 
         setPage,
         setLimit,
+        setSearch,
+        setSearchInput,
 
         addApplication,
         deleteApplication,
@@ -45,6 +49,17 @@ function CreditPage(){
             <div className="layout">
 
                 <ApplicationForm addApplication = {addApplication}/>
+
+                <input
+                        value={searchInput}
+                        onChange={(e) => 
+                            {
+                                setSearchInput(e.target.value)
+                                // setPage(1)
+                            }
+                        }
+                        placeholder="Search name..."
+                    />
             
                 <div>
                     <ApplicationList 

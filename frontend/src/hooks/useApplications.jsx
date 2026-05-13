@@ -16,6 +16,9 @@ export function useApplications() {
     const [limit, setLimit]= useState(4)
     const [totalPages, setTotalPages] = useState(0)
     const [totalCount, setTotalCount] = useState(0)
+    
+    const [search, setSearch] = useState("") 
+    const [searchInput, setSearchInput] = useState("")
 
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
@@ -41,7 +44,7 @@ export function useApplications() {
         setError(null)
 
         try {
-            const result = await getApplications(page, limit)
+            const result = await getApplications(page, limit, search)
 
             if (!Array.isArray(result.data)) {
                 throw new Error("Invalid data format")
@@ -53,7 +56,7 @@ export function useApplications() {
             if (result.pagination.page > result.pagination.totalPages){
                 setPage(result.pagination.totalPages)
             }
-            
+
             setTotalCount(result.pagination.totalCount)
 
         } catch (err) {
@@ -68,7 +71,19 @@ export function useApplications() {
 
     useEffect(() => {
         loadApplications()
-    }, [page, limit])
+    }, [page, limit, search])
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setSearch(searchInput)
+            setPage(1)
+        }, 500)
+        
+        return () => clearTimeout(timer)
+    }, [searchInput])
+
+    
+    
 
 
     async function addApplication (app) {
@@ -133,11 +148,15 @@ export function useApplications() {
         
         page,
         limit,
+        search,
+        searchInput,
         totalPages,
         totalCount,
 
         setPage,
         setLimit,
+        setSearch,
+        setSearchInput,
 
         addApplication,
         deleteApplication: removeApplication,

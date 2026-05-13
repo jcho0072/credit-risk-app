@@ -201,6 +201,7 @@ def get_applications():
     try:
         page = request.args.get("page", 1, type=int)
         limit = request.args.get("limit", 4, type=int)
+        search = request.args.get("search", "", type=str)
 
         if page < 1:
             page = 1
@@ -209,15 +210,24 @@ def get_applications():
         if limit > 100:
             limit = 100
 
+        search_query = Financials.query
+
+        if search:
+            search_query = search_query.filter(
+                Financials.person_name.like(f"%{search}%")
+            )
+
+
+        total_count = search_query.count()
+        total_pages = max(1, math.ceil(total_count / limit))
+
         applications = (
-            Financials.query
+            search_query
             .offset((page - 1) * limit)
             .limit(limit)
             .all()
         )
 
-        total_count = Financials.query.count()
-        total_pages = max(1, math.ceil(total_count / limit))
 
         return jsonify({
                 "data": [record.to_dict() for record in applications],

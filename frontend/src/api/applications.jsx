@@ -14,7 +14,7 @@ async function request(endpoint, options = {}) {
         try{
             result = await res.json()
            
-            
+
         } catch {
             throw new Error("Invalid response format from server")
         }
@@ -34,8 +34,8 @@ async function request(endpoint, options = {}) {
 }
 
 
-export async function getApplications(page, limit) {
-    return request(`/applications?page=${page}&limit=${limit}`, {
+export async function getApplications(page, limit,search) {
+    return request(`/applications?page=${page}&limit=${limit}&search=${search}`, {
         method: "GET"
     })
 }
