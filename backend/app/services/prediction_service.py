@@ -23,7 +23,7 @@ def run_prediction(data):
         "loan_status": 1 if (prob > threshold) else 0,
         "expected_loss": expected_loss,
         "threshold": threshold,
-        "decision": "Approve" if expected_loss < 10000 else "Reject",
+        "decision": "Reject" if prob > threshold or expected_loss > 10000 else "Approve",
         "risk": "High Risk" if (prob > threshold) else "Low Risk"
     }
 
