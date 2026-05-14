@@ -4,30 +4,43 @@ import {useApplications} from "../hooks/useApplications"
 
 import ApplicationForm from "../components/ApplicationForm"
 import ApplicationList from "../components/ApplicationList"
+import ApplicationSearch from "../components/ApplicationSearch"
 
 function CreditPage(){
 
     const {
         applications,
-
+        
         loading,
         error,
-
+        
         page,
         limit,
-        search,
-        searchInput,
-        totalPages,
-        totalCount,
 
         setPage,
         setLimit,
-        setSearch,
-        setSearchInput,
+        
+        totalPages,
+        totalCount,
+
+        name,
+        nameInput,
+
+        setName,
+        setNameInput,
+        
+        risk,
+        loanStatus,
+        decision,
+
+        setRisk,
+        setLoanStatus,
+        setDecision,
 
         addApplication,
         deleteApplication,
         updateApplication
+        
     } = useApplications() 
 
     if (loading) {
@@ -50,16 +63,19 @@ function CreditPage(){
 
                 <ApplicationForm addApplication = {addApplication}/>
 
-                <input
-                        value={searchInput}
-                        onChange={(e) => 
-                            {
-                                setSearchInput(e.target.value)
-                                // setPage(1)
-                            }
-                        }
-                        placeholder="Search name..."
-                    />
+                <ApplicationSearch 
+                    nameInput={nameInput}
+                    setNameInput={setNameInput}
+
+                    risk={risk}
+                    setRisk={setRisk}
+
+                    loanStatus={loanStatus}
+                    setLoanStatus={setLoanStatus}
+
+                    decision={decision}
+                    setDecision={setDecision}
+                />
             
                 <div>
                     <ApplicationList 

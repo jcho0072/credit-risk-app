@@ -1,6 +1,4 @@
 // data access layer
-
-
 const url = `${import.meta.env.VITE_API_URL}`;
 
 
@@ -34,8 +32,8 @@ async function request(endpoint, options = {}) {
 }
 
 
-export async function getApplications(page, limit,search) {
-    return request(`/applications?page=${page}&limit=${limit}&search=${search}`, {
+export async function getApplications(page, limit, name, risk, loan_status, decision) {
+    return request(`/applications?page=${page}&limit=${limit}&name=${name}&risk=${risk}&loan_status=${loan_status}&decision=${decision}`, {
         method: "GET"
     })
 }

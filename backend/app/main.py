@@ -17,7 +17,8 @@ load_dotenv()
 
 app = Flask(__name__, static_folder="../../frontend/dist", static_url_path="/")
 
-CORS(app, origins=["https://credit-risk-frontend-akjw.onrender.com"])
+CORS(app, origins= ["http://localhost:5173",
+                    "https://credit-risk-app-vwc5.onrender.com"])
 
 # @app.route("/")
 # def serve():
@@ -202,7 +203,10 @@ def get_applications():
     try:
         page = request.args.get("page", 1, type=int)
         limit = request.args.get("limit", 4, type=int)
-        search = request.args.get("search", "", type=str)
+        name = request.args.get("name", "", type=str)
+        risk = request.args.get("risk", "", type=str)
+        loan_status = request.args.get("loan_status", 0, type=int)
+        decision = request.args.get("decision", "", type=int)
 
         if page < 1:
             page = 1
@@ -213,10 +217,27 @@ def get_applications():
 
         search_query = Financials.query
 
-        if search:
+        if name:
             search_query = search_query.filter(
-                Financials.person_name.like(f"%{search}%")
+                Financials.person_name.like(f"%{name}%")
             )
+        
+        if risk:
+            search_query = search_query.filter(
+                Financials.risk == risk
+            )
+
+        if loan_status:
+            search_query = search_query.filter(
+                Financials.loan_status == loan_status 
+            )
+
+        if decision:
+             search_query = search_query.filter(
+                 Financials.decision == decision
+             )
+
+        
 
 
         total_count = search_query.count()

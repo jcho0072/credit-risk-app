@@ -17,8 +17,12 @@ export function useApplications() {
     const [totalPages, setTotalPages] = useState(0)
     const [totalCount, setTotalCount] = useState(0)
     
-    const [search, setSearch] = useState("") 
-    const [searchInput, setSearchInput] = useState("")
+    const [name, setName] = useState("") 
+    const [nameInput, setNameInput] = useState("")
+
+    const [risk, setRisk] = useState("")
+    const [loanStatus, setLoanStatus] = useState(0)
+    const [decision, setDecision] = useState("")
 
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
@@ -44,7 +48,7 @@ export function useApplications() {
         setError(null)
 
         try {
-            const result = await getApplications(page, limit, search)
+            const result = await getApplications(page, limit, name, risk, loanStatus, decision)
 
             if (!Array.isArray(result.data)) {
                 throw new Error("Invalid data format")
@@ -69,21 +73,21 @@ export function useApplications() {
         
     }
 
-    useEffect(() => {
+    useEffect(() => {   
         loadApplications()
-    }, [page, limit, search])
+    }, [page, limit, name, risk, loanStatus, decision])
 
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            setSearch(searchInput)
+            setName(nameInput)
             setPage(1)
         }, 500)
         
         return () => {
             clearTimeout(timer)
         }
-    }, [searchInput])
+    }, [nameInput])
 
     
     
@@ -151,15 +155,26 @@ export function useApplications() {
         
         page,
         limit,
-        search,
-        searchInput,
-        totalPages,
-        totalCount,
 
         setPage,
         setLimit,
-        setSearch,
-        setSearchInput,
+        
+        totalPages,
+        totalCount,
+
+        name,
+        nameInput,
+
+        setName,
+        setNameInput,
+        
+        risk,
+        loanStatus,
+        decision,
+
+        setRisk,
+        setLoanStatus,
+        setDecision,
 
         addApplication,
         deleteApplication: removeApplication,
