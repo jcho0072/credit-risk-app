@@ -17,7 +17,7 @@ function ApplicationSearch(
     } 
 ) {
 
-        return(
+        return(   
             <div>
 
                 <input
