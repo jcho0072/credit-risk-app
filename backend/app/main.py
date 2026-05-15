@@ -11,8 +11,8 @@ import os
 import joblib
 import math
 import pandas as pd
-
-from dotenv import load_dotenv
+ 
+from dotenv import load_dotenv   
 load_dotenv()
 
 app = Flask(__name__, static_folder="../../frontend/dist", static_url_path="/")

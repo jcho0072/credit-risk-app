@@ -15,7 +15,7 @@ def run_prediction(data):
     LGD = threshold
     loan_amnt = data.get("loan_amnt", 0)
 
-    expected_loss = prob * LGD * loan_amnt
+    expected_loss = prob * LGD * loan_amnt   
 
 
     return {
