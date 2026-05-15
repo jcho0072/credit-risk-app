@@ -38,7 +38,7 @@ function ApplicationSearch(
                 <select
                     value={loanStatus}
                     onChange={(e) => setLoanStatus(e.target.value)}
-                >
+                > 
                     <option value="">Select Status</option>
                     <option value="0">0</option>
                     <option value="1">1</option>
