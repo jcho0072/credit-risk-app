@@ -66,7 +66,6 @@ class Financials(db.Model):
     risk = db.Column(db.String(10), nullable = True)
     
     
-   
 
     def to_dict(self):
         return {
