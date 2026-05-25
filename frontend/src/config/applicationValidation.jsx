@@ -1,4 +1,4 @@
-import {HOME_OWNERSHIP_OPTIONS,
+        import {HOME_OWNERSHIP_OPTIONS,
         LOAN_INTENT_OPTIONS,
         LOAN_GRADE_OPTIONS
 } from "../config/applicationFieldSelections"
@@ -16,7 +16,6 @@ export const validation = {
         loan_percent_income: value => value <= 1 && value !== "",
         cb_person_default_on_file: value =>["Y","N"].includes(value),
         cb_person_cred_hist_length: value => value > 0 && value !== ""
-
     }
 
 export const validationMessages = {

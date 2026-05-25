@@ -51,7 +51,7 @@ class Financials(db.Model):
     loan_amnt = db.Column(db.Integer, nullable = False)
     loan_int_rate = db.Column(db.Float, nullable = False)
 
-    loan_status = db.Column(db.Integer, nullable = True) # check implementation later
+    loan_status = db.Column(db.Integer, nullable = True) # this needs to change 
 
     loan_percent_income = db.Column(db.Float, nullable = False)
 
@@ -59,7 +59,7 @@ class Financials(db.Model):
     cb_person_cred_hist_length = db.Column(db.Integer, nullable = False)
 
     pred_probability = db.Column(db.Float, nullable = True)
-    pred_status = db.Column(db.String(10), nullable = True)
+    pred_status = db.Column(db.String(10), nullable = True)   # this needs to change
     expected_loss = db.Column(db.Float, nullable = True)
     threshold = db.Column(db.Float, nullable = True)
     decision = db.Column(db.String(10), nullable = True)
@@ -68,7 +68,7 @@ class Financials(db.Model):
     
 
     def to_dict(self):
-        return {
+        return {      # add loan_status here
                 "id":self.id,
                 "person_name":self.person_name,
                 "person_age":self.person_age,
