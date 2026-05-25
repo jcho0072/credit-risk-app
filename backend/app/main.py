@@ -96,7 +96,7 @@ with app.app_context():
     db.create_all()
 
 
-REQUIRED_FIELDS = [
+REQUIRED_FIELDS = [  # add loan_status here
         "person_name",
         "person_age",
         "person_income",
@@ -111,7 +111,7 @@ REQUIRED_FIELDS = [
         "cb_person_cred_hist_length"
     ]
 
-FIELD_TYPES = {
+FIELD_TYPES = {  # add loan_status here
     "person_name": str,
     "person_age": int,
     "person_income": int,
@@ -124,7 +124,7 @@ FIELD_TYPES = {
     "cb_person_cred_hist_length": int
 }
 
-FIELD_VALIDATION = {
+FIELD_VALIDATION = {    # add loan_status here
     "person_name": lambda value: isinstance(value, str),
     "person_age": lambda value: value >= 18,
     "person_income": lambda value: value > 0,
@@ -226,7 +226,7 @@ def get_applications():
                 Financials.risk == risk
             )
 
-        if loan_status:
+        if loan_status:   # change this as well, at least for the relevant prediction_service file, loan_status name needs to change
             search_query = search_query.filter(
                 Financials.loan_status == loan_status 
             )
@@ -236,7 +236,6 @@ def get_applications():
                  Financials.decision == decision
              )
 
-        
 
 
         total_count = search_query.count()

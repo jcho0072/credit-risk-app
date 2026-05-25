@@ -9,7 +9,7 @@ function ApplicationSearch(
         risk,
         setRisk,
 
-        loanStatus,
+        loanStatus,   // this probably has to change too 
         setLoanStatus,
 
         decision,

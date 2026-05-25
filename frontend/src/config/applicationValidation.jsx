@@ -3,7 +3,7 @@
         LOAN_GRADE_OPTIONS
 } from "../config/applicationFieldSelections"
 
-export const validation = {
+export const validation = { // add loan_status
         person_name: value => value.trim().length >= 2 ,
         person_age: value => value > 18 && value !== "",
         person_income: value => value > 0 && value !== "",
@@ -18,7 +18,7 @@ export const validation = {
         cb_person_cred_hist_length: value => value > 0 && value !== ""
     }
 
-export const validationMessages = {
+export const validationMessages = {  // add loan_Status
         person_name: "Name must not be empty",
         person_age: "Age must be between 18 and 100 or must not be empty",
         person_income: "Income must not be 0 or empty",

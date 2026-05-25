@@ -34,7 +34,7 @@ function CreditPage(){
         decision,
 
         setRisk,
-        setLoanStatus,
+        setLoanStatus,   // name change
         setDecision,
 
         addApplication,

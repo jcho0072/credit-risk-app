@@ -3,7 +3,7 @@ import {HOME_OWNERSHIP_OPTIONS,
         LOAN_GRADE_OPTIONS
 } from "../config/applicationFieldSelections"
 
-export const fields = [
+export const fields = [   // add loan_status
         {name:"person_name", placeholder:"Name"},
         {name:"person_age", type:"number", placeholder:"Age"},
         {name: "person_income", type:"number", placeholder:"Income"},
