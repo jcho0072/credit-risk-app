@@ -32,8 +32,8 @@ async function request(endpoint, options = {}) {
 }
 
 
-export async function getApplications(page, limit, name, risk, pred_status, decision) {
-    return request(`/applications?page=${page}&limit=${limit}&name=${name}&risk=${risk}&loan_status=${pred_status}&decision=${decision}`, {
+export async function getApplications(page, limit, name, risk, loan_status, decision) {
+    return request(`/applications?page=${page}&limit=${limit}&name=${name}&risk=${risk}&loan_status=${loan_status}&decision=${decision}`, {
         method: "GET"
     })
 }

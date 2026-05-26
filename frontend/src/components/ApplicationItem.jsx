@@ -148,7 +148,7 @@ function ApplicationItem({application, deleteApplication, updateApplication}){
                         <br /> 
 
                         <div>  
-                        Loan Status: {form.pred_status ?? "N/A"}
+                        Predicted Default Status: {form.pred_status ?? "N/A"}
                         </div>
 
                         <div>  

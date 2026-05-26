@@ -8,6 +8,7 @@
         loan_grade: "",
         loan_amnt: "",
         loan_int_rate: "",
+        loan_status: "",
         loan_percent_income: "",
         cb_person_default_on_file: "",
         cb_person_cred_hist_length: ""

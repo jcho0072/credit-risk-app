@@ -326,7 +326,7 @@ def add_applications():
         cb_person_cred_hist_length = data["cb_person_cred_hist_length"],
 
         pred_probability = result["probability"],
-        pred_status = result["pred_status"],    # 
+        pred_status = result["pred_status"],    
         expected_loss = result["expected_loss"],
         threshold = result["threshold"],
         decision = result["decision"],
