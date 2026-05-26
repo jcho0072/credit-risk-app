@@ -230,7 +230,7 @@ def get_applications():
                 Financials.risk == risk
             )
 
-        if loan_status:   # change this as well, at least for the relevant prediction_service file, loan_status name needs to change
+        if loan_status:   
             search_query = search_query.filter(
                 Financials.loan_status == loan_status 
             )
@@ -298,9 +298,8 @@ def add_applications():
 
 
     try:
-        result = run_prediction(data)
-
         validation_error = validate_application(data)
+        result = run_prediction(data)
 
         if validation_error:
             return jsonify({
@@ -325,14 +324,13 @@ def add_applications():
         cb_person_default_on_file = data["cb_person_default_on_file"],
         cb_person_cred_hist_length = data["cb_person_cred_hist_length"],
 
-        pred_probability = result["probability"],
-        pred_status = result["pred_status"],    
-        expected_loss = result["expected_loss"],
-        threshold = result["threshold"],
-        decision = result["decision"],
-        risk = result["risk"]
-    )
-        
+        pred_probability = float(result["probability"]),
+        pred_status = int(result["pred_status"]),    
+        expected_loss = float(result["expected_loss"]),
+        threshold = int(result["threshold"]),
+        decision = str(result["decision"]),
+        risk = str(result["risk"])
+    )   
         db.session.add(new_record)
         db.session.commit()
 
@@ -348,6 +346,7 @@ def add_applications():
             {   "data": None,
                 "error":
                         {
+                            
                             "message":"Failed to create application",
                             "code":"CREATE_ERROR"
                         }}), 500
