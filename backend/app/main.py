@@ -68,7 +68,7 @@ class Financials(db.Model):
     
 
     def to_dict(self):
-        return {      # add loan_status here
+        return {     
                 "id":self.id,
                 "person_name":self.person_name,
                 "person_age":self.person_age,
@@ -80,6 +80,7 @@ class Financials(db.Model):
                 "loan_grade":self.loan_grade,
                 "loan_amnt":self.loan_amnt,
                 "loan_int_rate":self.loan_int_rate,
+                "loan_status":self.loan_status,
                 "loan_percent_income":self.loan_percent_income,
 
                 "cb_person_default_on_file":self.cb_person_default_on_file,
@@ -96,7 +97,7 @@ with app.app_context():
     db.create_all()
 
 
-REQUIRED_FIELDS = [  # add loan_status here
+REQUIRED_FIELDS = [
         "person_name",
         "person_age",
         "person_income",
@@ -106,12 +107,13 @@ REQUIRED_FIELDS = [  # add loan_status here
         "loan_grade",
         "loan_amnt",
         "loan_int_rate",
+        "loan_status",
         "loan_percent_income",
         "cb_person_default_on_file",
         "cb_person_cred_hist_length"
     ]
 
-FIELD_TYPES = {  # add loan_status here
+FIELD_TYPES = {  
     "person_name": str,
     "person_age": int,
     "person_income": int,
@@ -119,12 +121,13 @@ FIELD_TYPES = {  # add loan_status here
     "loan_grade": str,
     "loan_amnt": int,
     "loan_int_rate": float,
+    "loan_status": int, 
     "loan_percent_income": float,
     "cb_person_default_on_file": str,
     "cb_person_cred_hist_length": int
 }
 
-FIELD_VALIDATION = {    # add loan_status here
+FIELD_VALIDATION = {    
     "person_name": lambda value: isinstance(value, str),
     "person_age": lambda value: value >= 18,
     "person_income": lambda value: value > 0,
@@ -134,12 +137,13 @@ FIELD_VALIDATION = {    # add loan_status here
     "loan_grade": lambda value: isinstance(value, str),
     "loan_amnt": lambda value: value >= 0 and value <= 100000,
     "loan_int_rate": lambda value: value <= 100,
+    "loan_status": lambda value: value == 1 or value == 0,  # check this 
     "loan_percent_income": lambda value: value <= 1,
     "cb_person_default_on_file": lambda value: isinstance(value, str),
     "cb_person_cred_hist_length": lambda value: value >= 0
 }
 
-RESULT_FIELD_MAPPING = {
+RESULT_FIELD_MAPPING = {  # this may need to fundamentally change
     "pred_probability": "probability",
     "pred_status": "loan_status",
     "expected_loss": "expected_loss",
@@ -182,7 +186,7 @@ def validate_application(data):
                 "code": "INVALID_TYPE"
                 }}, 400
 
-    for field, validator in FIELD_VALIDATION.items():
+    for field, validator in FIELD_VALIDATION.items():  
         if not validator(data[field]):
             return {
             "data": None,
@@ -321,7 +325,7 @@ def add_applications():
         cb_person_cred_hist_length = data["cb_person_cred_hist_length"],
 
         pred_probability = result["probability"],
-        pred_status = result["loan_status"],
+        pred_status = result["loan_status"],    # change this acc to prediction_service
         expected_loss = result["expected_loss"],
         threshold = result["threshold"],
         decision = result["decision"],

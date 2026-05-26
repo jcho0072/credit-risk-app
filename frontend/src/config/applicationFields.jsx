@@ -3,7 +3,7 @@ import {HOME_OWNERSHIP_OPTIONS,
         LOAN_GRADE_OPTIONS
 } from "../config/applicationFieldSelections"
 
-export const fields = [   // add loan_status
+export const fields = [   
         {name:"person_name", placeholder:"Name"},
         {name:"person_age", type:"number", placeholder:"Age"},
         {name: "person_income", type:"number", placeholder:"Income"},
@@ -13,6 +13,7 @@ export const fields = [   // add loan_status
         {name: "loan_grade",type:"select", placeholder:"Loan grade", options:LOAN_GRADE_OPTIONS},
         {name: "loan_amnt", type:"number", placeholder:"Loan amount"},
         {name: "loan_int_rate", type:"number", placeholder:"Loan interest rate"},
+        {name: "loan_status", type:"number", placeholder:"Current loan status"},
         {name: "loan_percent_income", type:"number", placeholder:"Loan percent income"},
         {name: "cb_person_default_on_file", type:"select", placeholder:"Has Ever Defaulted?", options:["Y","N"]},
         {name: "cb_person_cred_hist_length", type:"number", placeholder:"Credit history"}
