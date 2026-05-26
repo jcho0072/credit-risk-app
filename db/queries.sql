@@ -14,6 +14,32 @@
 -- 	cb_person_cred_hist_length INTEGER
 -- );
 
+CREATE TABLE Financials(
+	person_id SERIAL PRIMARY KEY,
+	person_name VARCHAR(10),
+	person_age INTEGER,
+	person_income NUMERIC(9,2),
+	person_home_ownership VARCHAR(20),
+	person_emp_length NUMERIC,
+	
+	loan_intent VARCHAR(20),
+	loan_grade VARCHAR(5),
+	loan_amnt NUMERIC(9,2),
+	loan_int_rate NUMERIC(5,2),
+	loan_status VARCHAR(5),
+	loan_percent_income NUMERIC(5,2),
+	
+	cb_person_default_on_file VARCHAR(2),
+	cb_person_cred_hist_length INTEGER,
+
+	pred_probability NUMERIC(5,2),
+	pred_status INTEGER,
+	expected_loss NUMERIC(9,2),
+	threshold NUMERIC(9,2),
+	decision VARCHAR(20),
+	risk VARCHAR(20)
+);
+
 
 
 
@@ -219,7 +245,7 @@
 
 
 
--- division bitch
+
 -- round(count(*) * 100.0 / 
 	-- 	  sum(count(*)) over (),	
 	-- 	  2) as percentage_of_total
@@ -299,7 +325,7 @@
 -- 	GROUP BY l.loan_grade;
 
 
-select * from temp;
+-- select * from temp;
 
 
 

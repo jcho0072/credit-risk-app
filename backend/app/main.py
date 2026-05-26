@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request, send_from_directory, g
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine, inspect
+from sqlalchemy import text
 from flask_cors import CORS
 from shared.feature_engineering import FeatureEngineer
 
@@ -50,16 +50,14 @@ class Financials(db.Model):
     loan_grade = db.Column(db.String(5), nullable = False)
     loan_amnt = db.Column(db.Integer, nullable = False)
     loan_int_rate = db.Column(db.Float, nullable = False)
-
-    loan_status = db.Column(db.Integer, nullable = True) # this needs to change 
-
+    loan_status = db.Column(db.Integer, nullable = True) 
     loan_percent_income = db.Column(db.Float, nullable = False)
 
     cb_person_default_on_file = db.Column(db.String(5), nullable = False)
     cb_person_cred_hist_length = db.Column(db.Integer, nullable = False)
 
     pred_probability = db.Column(db.Float, nullable = True)
-    pred_status = db.Column(db.String(10), nullable = True)   # this needs to change
+    pred_status = db.Column(db.String(10), nullable = True)   
     expected_loss = db.Column(db.Float, nullable = True)
     threshold = db.Column(db.Float, nullable = True)
     decision = db.Column(db.String(10), nullable = True)
@@ -95,6 +93,8 @@ class Financials(db.Model):
 
 with app.app_context():
     db.create_all()
+    db.session.execute(text("SELECT 1"))
+    print("Database connected successfully")
 
 
 REQUIRED_FIELDS = [
