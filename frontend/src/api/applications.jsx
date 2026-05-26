@@ -20,7 +20,7 @@ async function request(endpoint, options = {}) {
         // HTTP error
         if (!res.ok) {
             throw new Error(
-                result.error?.message || "Request failed"
+                result.error?.message || `HTTP ${res.status}`
             )
         }
         return result

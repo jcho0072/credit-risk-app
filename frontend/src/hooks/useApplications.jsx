@@ -31,9 +31,9 @@ export function useApplications() {
         if (!err || !err.message) {
             return "Something went wrong. Please try again."
         }
-        if (err.message.includes("Network") || err.message.includes("Failed to fetch")) {
-            return "Unable to connect. Check your internet or try again."
-        }
+        // if (err.message.includes("Failed to fetch")) {
+        //     return "Unable to connect. Check your internet or try again."
+        // }
         if (err.message.includes("Invalid response")) {
             return "Server returned an unexpected response"
         }

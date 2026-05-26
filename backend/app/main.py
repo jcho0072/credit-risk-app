@@ -39,7 +39,7 @@ df = pd.DataFrame
 # Database models
 
 class Financials(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
+    person_id = db.Column(db.Integer, primary_key = True)
     person_name = db.Column(db.String(100), nullable = False)   
     person_age = db.Column(db.Integer, nullable = False)
     person_income = db.Column(db.Integer, nullable = False)
@@ -67,7 +67,7 @@ class Financials(db.Model):
 
     def to_dict(self):
         return {     
-                "id":self.id,
+                "person_id":self.person_id,
                 "person_name":self.person_name,
                 "person_age":self.person_age,
                 "person_income":self.person_income,
@@ -208,8 +208,8 @@ def get_applications():
         limit = request.args.get("limit", 4, type=int)
         name = request.args.get("name", "", type=str)
         risk = request.args.get("risk", "", type=str)
-        loan_status = request.args.get("loan_status", 0, type=int)
-        decision = request.args.get("decision", "", type=int)
+        loan_status = request.args.get("loan_status", type=int)
+        decision = request.args.get("decision", type=str)
 
         if page < 1:
             page = 1
@@ -230,7 +230,7 @@ def get_applications():
                 Financials.risk == risk
             )
 
-        if loan_status:   
+        if loan_status is not None:   
             search_query = search_query.filter(
                 Financials.loan_status == loan_status 
             )
@@ -268,7 +268,7 @@ def get_applications():
         return jsonify({
             "data": None,
             "error": {
-                "message": "Failed to fetch application",
+                "message": str(e),
                 "code": "FETCH_ERROR"}
         }), 500
 
@@ -353,9 +353,9 @@ def add_applications():
 
 
 
-@app.route("/applications/<int:id>", methods = ['DELETE'])
-def delete_applications(id):
-    application = Financials.query.get(id)
+@app.route("/applications/<int:person_id>", methods = ['DELETE'])
+def delete_applications(person_id):
+    application = Financials.query.get(person_id)
 
     if not application:
         return jsonify({
@@ -385,8 +385,8 @@ def delete_applications(id):
 #         return {"error": "Failed to delete applications"}, 500
 
 
-@app.route("/applications/<int:id>", methods = ['PUT'])
-def update_applications(id):
+@app.route("/applications/<int:person_id>", methods = ['PUT'])
+def update_applications(person_id):
     # Request type validation
     if not request.is_json:
          return jsonify({
@@ -415,7 +415,7 @@ def update_applications(id):
                 "error": validation_error
             }), 400
 
-    application = Financials.query.get(id)
+    application = Financials.query.get(person_id)
 
     if not application:
         return jsonify({
