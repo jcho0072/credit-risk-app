@@ -20,7 +20,7 @@ def run_prediction(data):
 
     return {
         "probability": float(prob),
-        "loan_status": 1 if (prob > threshold) else 0,   # change this 
+        "pred_status": 1 if (prob > threshold) else 0, 
         "expected_loss": expected_loss,
         "threshold": threshold,
         "decision": "Reject" if prob > threshold or expected_loss > 10000 else "Approve",

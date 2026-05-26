@@ -143,9 +143,9 @@ FIELD_VALIDATION = {
     "cb_person_cred_hist_length": lambda value: value >= 0
 }
 
-RESULT_FIELD_MAPPING = {  # this may need to fundamentally change
+RESULT_FIELD_MAPPING = {  
     "pred_probability": "probability",
-    "pred_status": "loan_status",
+    "pred_status": "pred_status",
     "expected_loss": "expected_loss",
     "threshold": "threshold",
     "decision": "decision",
@@ -319,13 +319,14 @@ def add_applications():
         loan_grade = data["loan_grade"],
         loan_amnt = data["loan_amnt"],
         loan_int_rate = data["loan_int_rate"],
+        loan_status = data["loan_status"],
         loan_percent_income = data["loan_percent_income"],
 
         cb_person_default_on_file = data["cb_person_default_on_file"],
         cb_person_cred_hist_length = data["cb_person_cred_hist_length"],
 
         pred_probability = result["probability"],
-        pred_status = result["loan_status"],    # change this acc to prediction_service
+        pred_status = result["pred_status"],    # 
         expected_loss = result["expected_loss"],
         threshold = result["threshold"],
         decision = result["decision"],

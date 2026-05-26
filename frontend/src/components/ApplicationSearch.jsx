@@ -19,7 +19,6 @@ function ApplicationSearch(
 
         return(   
             <div>
-
                 <input
                     value={nameInput}
                     onChange={(e) => setNameInput(e.target.value)}
