@@ -28,6 +28,8 @@ CORS(app, origins= ["http://localhost:5173",
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+print(app.config["SQLALCHEMY_DATABASE_URI"])
+
 db = SQLAlchemy(app)
 
 
