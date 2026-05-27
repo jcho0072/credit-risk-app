@@ -99,6 +99,20 @@ with app.app_context():
     print("Render PostgreSQL connected successfully")
 
 
+@app.route("/debug-db")
+def debug_db():
+    from sqlalchemy import text
+
+    result = db.session.execute(
+        text("SELECT current_user, current_database()")
+    ).fetchone()
+
+    return {
+        "user": result[0],
+        "database": result[1]
+    }
+
+
 REQUIRED_FIELDS = [
         "person_name",
         "person_age",
