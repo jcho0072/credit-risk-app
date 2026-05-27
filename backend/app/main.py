@@ -40,15 +40,15 @@ df = pd.DataFrame
 
 class Financials(db.Model):
     person_id = db.Column(db.Integer, primary_key = True)
-    person_name = db.Column(db.String(100), nullable = False)   
+    person_name = db.Column(db.String(30), nullable = False)   
     person_age = db.Column(db.Integer, nullable = False)
-    person_income = db.Column(db.Integer, nullable = False)
-    person_home_ownership = db.Column(db.String(100), nullable = False)
+    person_income = db.Column(db.Float, nullable = False)
+    person_home_ownership = db.Column(db.String(20), nullable = False)
     person_emp_length = db.Column(db.Integer, nullable = False)
 
-    loan_intent = db.Column(db.String(100), nullable = False)
+    loan_intent = db.Column(db.String(20), nullable = False)
     loan_grade = db.Column(db.String(5), nullable = False)
-    loan_amnt = db.Column(db.Integer, nullable = False)
+    loan_amnt = db.Column(db.Float, nullable = False)
     loan_int_rate = db.Column(db.Float, nullable = False)
     loan_status = db.Column(db.Integer, nullable = True) 
     loan_percent_income = db.Column(db.Float, nullable = False)
@@ -60,8 +60,8 @@ class Financials(db.Model):
     pred_status = db.Column(db.String(10), nullable = True)   
     expected_loss = db.Column(db.Float, nullable = True)
     threshold = db.Column(db.Float, nullable = True)
-    decision = db.Column(db.String(10), nullable = True)
-    risk = db.Column(db.String(10), nullable = True)
+    decision = db.Column(db.String(20), nullable = True)
+    risk = db.Column(db.String(20), nullable = True)
     
     
 
@@ -301,6 +301,7 @@ def add_applications():
         validation_error = validate_application(data)
         result = run_prediction(data)
 
+
         if validation_error:
             return jsonify({
                 "data": None,
@@ -308,21 +309,21 @@ def add_applications():
             }), 400
 
         new_record = Financials(
-        person_name = data["person_name"],
-        person_age = data["person_age"],
-        person_income = data["person_income"],
-        person_home_ownership = data["person_home_ownership"],
-        person_emp_length = data["person_emp_length"],
+        person_name = str(data["person_name"]),
+        person_age = int(data["person_age"]),
+        person_income = float(data["person_income"]),
+        person_home_ownership = str(data["person_home_ownership"]),
+        person_emp_length = int(data["person_emp_length"]),
 
-        loan_intent = data["loan_intent"],
-        loan_grade = data["loan_grade"],
-        loan_amnt = data["loan_amnt"],
-        loan_int_rate = data["loan_int_rate"],
-        loan_status = data["loan_status"],
-        loan_percent_income = data["loan_percent_income"],
+        loan_intent = str(data["loan_intent"]),
+        loan_grade = str(data["loan_grade"]),
+        loan_amnt = float(data["loan_amnt"]),
+        loan_int_rate = float(data["loan_int_rate"]),
+        loan_status = int(data["loan_status"]),
+        loan_percent_income = float(data["loan_percent_income"]),
 
-        cb_person_default_on_file = data["cb_person_default_on_file"],
-        cb_person_cred_hist_length = data["cb_person_cred_hist_length"],
+        cb_person_default_on_file = str(data["cb_person_default_on_file"]),
+        cb_person_cred_hist_length = int(data["cb_person_cred_hist_length"]),
 
         pred_probability = float(result["probability"]),
         pred_status = int(result["pred_status"]),    
@@ -347,7 +348,7 @@ def add_applications():
                 "error":
                         {
                             
-                            "message":"Failed to create application",
+                            "message": str(e),
                             "code":"CREATE_ERROR"
                         }}), 500
 
@@ -415,7 +416,7 @@ def update_applications(person_id):
                 "error": validation_error
             }), 400
 
-    application = Financials.query.get(person_id)
+    application = Financials.query.get(int(person_id))
 
     if not application:
         return jsonify({
@@ -429,7 +430,7 @@ def update_applications(person_id):
     for field in REQUIRED_FIELDS:
         setattr(application, field, data[field])
 
-
+    
     result = run_prediction(data)
 
     for field, value in RESULT_FIELD_MAPPING.items():

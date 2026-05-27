@@ -54,7 +54,7 @@ function ApplicationItem({application, deleteApplication, updateApplication}){
 
         setErrors({})
 
-        updateApplication(application.id, form)
+        updateApplication(application.person_id, form)
         setEditing(false)
     }
     
@@ -70,6 +70,10 @@ function ApplicationItem({application, deleteApplication, updateApplication}){
                                 if (f.type === "select") {
                                     return ( 
                                     <div key={f.name} className="form-field">
+
+                                    <label>
+                                        {f.placeholder}
+                                    </label>
                                         
                                     <select
                                     name={f.name}
@@ -108,7 +112,7 @@ function ApplicationItem({application, deleteApplication, updateApplication}){
                                     type={f.type || "text"}
                                     value={form[f.name]}
                                     onChange={handleChange}
-                                    placeholder={f.placeholder}
+                                    // placeholder={f.placeholder}
                                 />
 
                                 {errors[f.name] && (
@@ -166,7 +170,7 @@ function ApplicationItem({application, deleteApplication, updateApplication}){
                     </div>
 
 
-                    <button onClick={() => deleteApplication(application.id)}>
+                    <button onClick={() => deleteApplication(application.person_id)}>
                     Delete
                     </button>
                         

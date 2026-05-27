@@ -49,8 +49,8 @@ export async function createApplication(payload) {
 
 }
 
-export async function updateApplication(id, payload) {
-    return request(`/applications/${id}`, {
+export async function updateApplication(person_id, payload) {
+    return request(`/applications/${person_id}`, {
         method: "PUT",
         headers: {
                 "Content-Type": "application/json"
@@ -59,8 +59,8 @@ export async function updateApplication(id, payload) {
     })
 }
 
-export async function deleteApplication(id) {
-    return request(`/applications/${id}`, {
+export async function deleteApplication(person_id) {
+    return request(`/applications/${person_id}`, {
         method: "DELETE"
     })
 }

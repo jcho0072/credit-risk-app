@@ -6,7 +6,7 @@ function ApplicationList ({applications, deleteApplication, updateApplication}) 
             <ul>
                 {applications.map(a => 
                     <ApplicationItem 
-                        key = {a.id}
+                        key = {a.person_id}
                         application={a}
                         deleteApplication={deleteApplication}
                         updateApplication={updateApplication}

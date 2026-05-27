@@ -21,7 +21,7 @@ export function useApplications() {
     const [nameInput, setNameInput] = useState("")
 
     const [risk, setRisk] = useState("")
-    const [loanStatus, setLoanStatus] = useState(0)
+    const [loanStatus, setLoanStatus] = useState("")
     const [decision, setDecision] = useState("")
 
     const [loading, setLoading] = useState(false)
@@ -109,11 +109,11 @@ export function useApplications() {
     }
 
 
-     async function removeApplication (id) {
+     async function removeApplication (person_id) {
         setLoading(true)
         setError(null)
         try {
-            await deleteApplication(id)
+            await deleteApplication(person_id)
             
             await loadApplications()
             // setApplications((prev) => prev.filter(t => t.id !== id))
@@ -133,12 +133,12 @@ export function useApplications() {
     //     }
     // }
 
-    async function updateApp (id, app) {
+    async function updateApp (person_id, app) {
         setLoading(true)
         setError(null)
         try {
-            const result = await updateApplication(id, app)
-            setApplications(prev => prev.map(a => a.id === result.id? result : a))
+            const result = await updateApplication(person_id, app)
+            setApplications(prev => prev.map(a => a.person_id === result.person_id? result : a))
        } catch (err){
             
             setError(mapErrorToMessage(err))
