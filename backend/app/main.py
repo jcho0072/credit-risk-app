@@ -94,7 +94,7 @@ class Financials(db.Model):
 with app.app_context():
     db.create_all()
     db.session.execute(text("SELECT 1"))
-    print("Database connected successfully")
+    print("Render PostgreSQL connected successfully")
 
 
 REQUIRED_FIELDS = [
