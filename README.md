@@ -64,15 +64,6 @@ python -m backend.app.main
 ```
 
 
-
-### Frontend
-- Run frontend:
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
 ## Development Setup 
 - Frontend:
 ```bash
@@ -80,14 +71,13 @@ cd frontend
 npm install 
 npm run dev
 ```
-- Runs on:
---    http://localhost:5173
+- Runs on: http://localhost:5173
   
 
-- Run backend:
+- Backend:
 ```bash
 cd backend
-waitress-serve --listen=127.0.0.1:5000 backend.app.main:app  
+python -m app.main
 ```
 
 - Open:
