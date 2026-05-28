@@ -71,8 +71,11 @@ cd frontend
 npm install 
 npm run dev
 ```
-- Runs on: http://localhost:5173
-  
+
+- Open:
+```bash
+http://localhost:5173
+```
 
 - Backend:
 ```bash
@@ -84,6 +87,20 @@ python -m app.main
 ```bash
 http://localhost:5000
 ```
+
+## Production Deployment
+All relevant services were deployed via Render web service.
+
+```markdown
+- Frontend service  
+  https://credit-risk-frontend-akjw.onrender.com
+
+- Backend service  
+  https://credit-risk-app-vwc5.onrender.com
+
+- Database service also hosted here on Render
+
+
 
 
 ## Usage
