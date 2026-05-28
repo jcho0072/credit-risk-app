@@ -74,11 +74,14 @@ npm run dev
 ```
 
 ## Development Setup 
-- Build frontend:
+- Frontend:
 ```bash
-cd frontend 
+cd frontend
+npm install 
 npm run dev
-``` 
+```
+Runs on:
+- http://localhost:5173
 
 - Run backend:
 ```bash
