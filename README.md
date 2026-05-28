@@ -81,7 +81,7 @@ npm install
 npm run dev
 ```
 - Runs on:
--    http://localhost:5173
+--    http://localhost:5173
   
 
 - Run backend:
