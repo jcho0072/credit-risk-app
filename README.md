@@ -89,16 +89,17 @@ http://localhost:5000
 ```
 
 ## Production Deployment
-All relevant services were deployed via Render web service.
+All relevant services were deployed via Render.
 
 ```markdown
-- Frontend service  
+- Frontend service (Render Static Site)  
   https://credit-risk-frontend-akjw.onrender.com
 
-- Backend service  
+- Backend service (Render Web Service)
   https://credit-risk-app-vwc5.onrender.com
 
-- Database service also hosted here on Render
+- Database service
+  PostgreSQL hosted on render
 ```
 
 
