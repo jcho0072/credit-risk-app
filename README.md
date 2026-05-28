@@ -12,14 +12,10 @@ An application that predicts the probability of a loan default using a machine l
 ### Tech Stack
    - Frontend: React
    - Backend: Flask
-   - Database: Oracle (development/testing), SQLite (deployment)
+   - Database: PostgreSQL (development/deployment)
    - ML Model: Scikit-learn libaries and pipeline
 
    *** 
-   Note: The project was initially developed using Oracle DB for experimentation with enterprise database systems. 
-   
-
-For deployment and portability, it was adapted to use SQLite.
 
 ## How the application functions
 1. User enters their loan application details in various fields through a server browser with the frontend display.
@@ -77,11 +73,11 @@ npm install
 npm run dev
 ```
 
-## Production Setup 
+## Development Setup 
 - Build frontend:
 ```bash
 cd frontend 
-npm run build
+npm run dev
 ``` 
 
 - Run backend:
