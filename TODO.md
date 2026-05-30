@@ -4,11 +4,13 @@
 
 - [ ] Rename the `Financials` model to `LoanApplication` to clarify that each row represents an application snapshot.
 - [ ] Rename `person_id` to `application_id`.
-- [ ] Move SQLAlchemy models into `backend/app/models/`.
-- [ ] Move API endpoints into `backend/app/routes/`.
-- [ ] Extract request validation into `backend/app/validators/`.
-- [ ] Introduce an application factory and `extensions.py` for Flask extension initialization.
-- [ ] Consolidate backend configuration under `backend/app/config/`.
+- [x] Move SQLAlchemy models into `backend/app/models/`.
+- [x] Move API endpoints into `backend/app/routes/`.
+- [x] Extract request validation into `backend/app/validators/`.
+- [x] Introduce an application factory in `backend/app/__init__.py`.
+- [x] Refactor API routes to use Flask Blueprints to avoid circular imports.
+- [x] Initialize Flask extensions in `backend/app/extensions.py`.
+- [x] Consolidate backend configuration under `backend/app/config/`.
 - [ ] Remove the unused `shared/config.py` file.
 - [ ] Choose one SQLite development database location and ignore generated database files.
 - [ ] Add a root `.env.example` file with placeholder configuration values.
