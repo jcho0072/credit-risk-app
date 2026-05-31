@@ -1,6 +1,6 @@
 # Project Roadmap & TODO
 
-## ✅ Completed Tasks
+## Completed Tasks
 - [x] **Structural Refactoring**: Moved logic into modular directories (`models/`, `routes/`, `validators/`, `services/`).
 - [x] **Application Factory**: Implemented `create_app()` in `backend/app/__init__.py`.
 - [x] **Extension Management**: Centralized SQLAlchemy initialization in `extensions.py` to prevent circular imports.
@@ -8,14 +8,14 @@
 - [x] **Input Validation**: Extracted complex validation logic into a dedicated `application_validator.py`.
 - [x] **Configuration Management**: Consolidated environment paths and variables in `backend/app/config/`.
 
-## 🛠️ Backend & Domain Refactoring
+##  Backend & Domain Refactoring
 - [ ] **Standardize Domain Naming**: Rename the `Financials` model and class to `LoanApplication` (Aligns Backend with Frontend terminology).
 - [ ] **Identity Refactoring**: Rename `person_id` to `application_id` to reflect that records are application snapshots, not unique user profiles.
 - [ ] **Cleanup Legacy Assets**: Remove unused `shared/config.py` and redundant `app.db` locations.
 - [ ] **API Security**: Restrict or remove the `/debug-db` route for production environments.
 - [ ] **Environment Documentation**: Create a `.env.example` in the root directory to standardize local setup for new contributors.
 
-## 🗄️ Database & Infrastructure (Next Priority)
+##  Database & Infrastructure 
 - [ ] **Legacy SQL Cleanup**: Remove "garbage" Oracle and PostgreSQL scripts from the `db/` folder to eliminate dialect confusion.
 - [ ] **Migration Strategy**: Initialize `Flask-Migrate` (Alembic) to handle schema changes instead of relying on `db.create_all()`.
 - [ ] **PostgreSQL Synchronization**: 
@@ -24,13 +24,9 @@
     - [ ] Add `psycopg2-binary` to `requirements.txt` for production compatibility.
 - [ ] **Data Integrity**: Implement SQL-level constraints (e.g., `CHECK` constraints for age and income) to augment Python validation.
 
-## 🧪 Quality Assurance & Observability
+##  Quality Assurance & Observability
 - [ ] **Unit Testing**: Add API tests covering CRUD operations and edge-case validations (using `pytest`).
-- [ ] **ML Observability**: 
-    - [ ] Implement version tracking for the `model.pkl` artifact in the database.
-    - [ ] Log prediction timestamps and threshold values used for each decision.
-- [ ] **Error Handling**: Standardize API error responses across all service layers.
 
-## 🚀 Future Considerations
+##  Future Considerations
 - [ ] **Relational Expansion**: Split the flat `LoanApplication` table into `Applicants` and `Loans` if repeat applications are supported.
 - [ ] **Advanced SQL Architecture**: Transition to a dimensional model (Star Schema) in the database for advanced analytical reporting.

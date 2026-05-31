@@ -45,9 +45,6 @@ select * from financials;
 
 
 
-
-
-
 -- SELECT 
 -- 	*
 -- 	FROM(
@@ -104,7 +101,7 @@ select * from financials;
 
 
 
--- Use later when all are done
+
 -- drop table ApplicantDIM;
 -- drop table RiskDIM;
 -- drop table LoanDIM;
