@@ -32,6 +32,7 @@ def create_app():
         }
 
     with app.app_context():
+        print(f"--- CONNECTED TO: {db.engine.url.drivername} ---")
         db.create_all()
         
     return app
