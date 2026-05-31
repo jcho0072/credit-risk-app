@@ -1,25 +1,36 @@
-# TODO
+# Project Roadmap & TODO
 
-## Backend Refactoring
+## ✅ Completed Tasks
+- [x] **Structural Refactoring**: Moved logic into modular directories (`models/`, `routes/`, `validators/`, `services/`).
+- [x] **Application Factory**: Implemented `create_app()` in `backend/app/__init__.py`.
+- [x] **Extension Management**: Centralized SQLAlchemy initialization in `extensions.py` to prevent circular imports.
+- [x] **Blueprint Integration**: Refactored API routes into a modular Blueprint system.
+- [x] **Input Validation**: Extracted complex validation logic into a dedicated `application_validator.py`.
+- [x] **Configuration Management**: Consolidated environment paths and variables in `backend/app/config/`.
 
-- [ ] Rename the `Financials` model to `LoanApplication` to clarify that each row represents an application snapshot.
-- [ ] Rename `person_id` to `application_id`.
-- [x] Move SQLAlchemy models into `backend/app/models/`.
-- [x] Move API endpoints into `backend/app/routes/`.
-- [x] Extract request validation into `backend/app/validators/`.
-- [x] Introduce an application factory in `backend/app/__init__.py`.
-- [x] Refactor API routes to use Flask Blueprints to avoid circular imports.
-- [x] Initialize Flask extensions in `backend/app/extensions.py`.
-- [x] Consolidate backend configuration under `backend/app/config/`.
-- [ ] Remove the unused `shared/config.py` file.
-- [ ] Choose one SQLite development database location and ignore generated database files.
-- [ ] Add a root `.env.example` file with placeholder configuration values.
-- [ ] Restrict or remove the `/debug-db` route outside development.
-- [ ] Add API tests for create, read, update, delete, and validation behavior.
+## 🛠️ Backend & Domain Refactoring
+- [ ] **Standardize Domain Naming**: Rename the `Financials` model and class to `LoanApplication` (Aligns Backend with Frontend terminology).
+- [ ] **Identity Refactoring**: Rename `person_id` to `application_id` to reflect that records are application snapshots, not unique user profiles.
+- [ ] **Cleanup Legacy Assets**: Remove unused `shared/config.py` and redundant `app.db` locations.
+- [ ] **API Security**: Restrict or remove the `/debug-db` route for production environments.
+- [ ] **Environment Documentation**: Create a `.env.example` in the root directory to standardize local setup for new contributors.
 
-## Future Scaling Considerations
+## 🗄️ Database & Infrastructure (Next Priority)
+- [ ] **Legacy SQL Cleanup**: Remove "garbage" Oracle and PostgreSQL scripts from the `db/` folder to eliminate dialect confusion.
+- [ ] **Migration Strategy**: Initialize `Flask-Migrate` (Alembic) to handle schema changes instead of relying on `db.create_all()`.
+- [ ] **PostgreSQL Synchronization**: 
+    - [ ] Ensure `DATABASE_URL` uses the `postgresql://` driver prefix.
+    - [ ] Verify Render environment variables are correctly mapped to the Web Service.
+    - [ ] Add `psycopg2-binary` to `requirements.txt` for production compatibility.
+- [ ] **Data Integrity**: Implement SQL-level constraints (e.g., `CHECK` constraints for age and income) to augment Python validation.
 
-- [ ] Introduce tracked database migrations before changing a deployed schema.
-- [ ] Record the model version and threshold used for each prediction.
-- [ ] Separate applicant identity from loan-application snapshots if repeat applications become a supported feature.
-- [ ] Move from SQLite to a managed relational database if concurrent writes or multiple backend instances are required.
+## 🧪 Quality Assurance & Observability
+- [ ] **Unit Testing**: Add API tests covering CRUD operations and edge-case validations (using `pytest`).
+- [ ] **ML Observability**: 
+    - [ ] Implement version tracking for the `model.pkl` artifact in the database.
+    - [ ] Log prediction timestamps and threshold values used for each decision.
+- [ ] **Error Handling**: Standardize API error responses across all service layers.
+
+## 🚀 Future Considerations
+- [ ] **Relational Expansion**: Split the flat `LoanApplication` table into `Applicants` and `Loans` if repeat applications are supported.
+- [ ] **Advanced SQL Architecture**: Transition to a dimensional model (Star Schema) in the database for advanced analytical reporting.
