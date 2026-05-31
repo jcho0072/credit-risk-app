@@ -19,7 +19,7 @@ def create_app():
     # Blueprints
     app.register_blueprint(applications_bp)
     
-    # Debug route (can be restricted later)
+    # Debug route (can be restricted later) 
     @app.route("/debug-db")
     def debug_db():
         from sqlalchemy import text

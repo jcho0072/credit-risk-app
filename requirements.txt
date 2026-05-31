@@ -6,3 +6,4 @@ scikit-learn
 joblib
 gunicorn
 python-dotenv
+psycopg2-binary
