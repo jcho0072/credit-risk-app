@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
-from backend.app.extensions import db
+from backend.app.extensions import db, migrate
 from backend.app.config.paths import DATABASE_URL
 from backend.app.routes.applications import applications_bp
 import os
@@ -15,6 +15,9 @@ def create_app():
     # Extensions
     CORS(app, origins=["http://localhost:5173", "https://credit-risk-frontend-akjw.onrender.com"])
     db.init_app(app)
+
+    # Migrations 
+    migrate.init_app(app, db)
     
     # Blueprints
     app.register_blueprint(applications_bp)
