@@ -34,8 +34,8 @@ def create_app():
             "database": result[1]
         }
 
-    with app.app_context():
-        print(f"--- CONNECTED TO: {db.engine.url.drivername} ---")
-        db.create_all()
+    # with app.app_context():
+    #     print(f"--- CONNECTED TO: {db.engine.url.drivername} ---")
+    #     db.create_all()
         
     return app
