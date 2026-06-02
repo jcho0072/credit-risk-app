@@ -1,1 +1,1 @@
-from .financials import Financials
+from .loan_applications import LoanApplications

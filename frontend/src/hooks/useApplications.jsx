@@ -109,11 +109,11 @@ export function useApplications() {
     }
 
 
-     async function removeApplication (person_id) {
+     async function removeApplication (application_id) {
         setLoading(true)
         setError(null)
         try {
-            await deleteApplication(person_id)
+            await deleteApplication(application_id)
             
             await loadApplications()
             // setApplications((prev) => prev.filter(t => t.id !== id))
@@ -133,12 +133,13 @@ export function useApplications() {
     //     }
     // }
 
-    async function updateApp (person_id, app) {
+    async function updateApp (application_id, app) {
         setLoading(true)
         setError(null)
         try {
-            const result = await updateApplication(person_id, app)
-            setApplications(prev => prev.map(a => a.person_id === result.person_id? result : a))
+            const result = await updateApplication(application_id, app)
+            const updatedApp = result.data
+            setApplications(prev => prev.map(a => a.application_id === updatedApp.application_id ? updatedApp : a))
        } catch (err){
             
             setError(mapErrorToMessage(err))

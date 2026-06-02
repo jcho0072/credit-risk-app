@@ -54,7 +54,7 @@ function ApplicationItem({application, deleteApplication, updateApplication}){
 
         setErrors({})
 
-        updateApplication(application.person_id, form)
+        updateApplication(application.application_id, form)
         setEditing(false)
     }
     
@@ -170,7 +170,7 @@ function ApplicationItem({application, deleteApplication, updateApplication}){
                     </div>
 
 
-                    <button onClick={() => deleteApplication(application.person_id)}>
+                    <button onClick={() => deleteApplication(application.application_id)}>
                     Delete
                     </button>
                         

@@ -1,7 +1,7 @@
 from backend.app.extensions import db
 
-class Financials(db.Model):
-    person_id = db.Column(db.Integer, primary_key = True)
+class LoanApplications(db.Model):
+    application_id = db.Column(db.Integer, primary_key = True)
     person_name = db.Column(db.String(30), nullable = False)   
     person_age = db.Column(db.Integer, nullable = False)
     person_income = db.Column(db.Float, nullable = False)
@@ -29,7 +29,7 @@ class Financials(db.Model):
 
     def to_dict(self):
         return {     
-                "person_id":self.person_id,
+                "application_id":self.application_id,
                 "person_name":self.person_name,
                 "person_age":self.person_age,
                 "person_income":self.person_income,

@@ -9,8 +9,8 @@
 - [x] **Configuration Management**: Consolidated environment paths and variables in `backend/app/config/`.
 
 ##  Backend & Domain Refactoring
-- [ ] **Standardize Domain Naming**: Rename the `Financials` model and class to `LoanApplication` (Aligns Backend with Frontend terminology).
-- [ ] **Identity Refactoring**: Rename `person_id` to `application_id` to reflect that records are application snapshots, not unique user profiles.
+- [x] **Standardize Domain Naming**: Rename the `Financials` model and class to `LoanApplications` (Aligns Backend with Frontend terminology).
+- [x] **Identity Refactoring**: Rename `person_id` to `application_id` to reflect that records are application snapshots, not unique user profiles.
 - [ ] **Cleanup Legacy Assets**: Remove unused `shared/config.py` and redundant `app.db` locations.
 - [ ] **API Security**: Restrict or remove the `/debug-db` route for production environments.
 - [ ] **Environment Documentation**: Create a `.env.example` in the root directory to standardize local setup for new contributors.

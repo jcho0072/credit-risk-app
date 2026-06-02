@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from backend.app.models.financials import Financials
+from backend.app.models.loan_applications import LoanApplications
 from backend.app.extensions import db
 from backend.app.services.prediction_service import run_prediction
 from backend.app.validators.application_validator import validate_application, REQUIRED_FIELDS, RESULT_FIELD_MAPPING
@@ -25,26 +25,26 @@ def get_applications():
         if limit > 100:
             limit = 100
 
-        search_query = Financials.query
+        search_query = LoanApplications.query
 
         if name:
             search_query = search_query.filter(
-                Financials.person_name.like(f"%{name}%")
+                LoanApplications.person_name.like(f"%{name}%")
             )
         
         if risk:
             search_query = search_query.filter(
-                Financials.risk == risk
+                LoanApplications.risk == risk
             )
 
         if loan_status is not None:   
             search_query = search_query.filter(
-                Financials.loan_status == loan_status 
+                LoanApplications.loan_status == loan_status 
             )
 
         if decision:
              search_query = search_query.filter(
-                 Financials.decision == decision
+                 LoanApplications.decision == decision
              )
 
         total_count = search_query.count()
@@ -94,7 +94,7 @@ def add_applications():
     try:
         result = run_prediction(data)
 
-        new_record = Financials(
+        new_record = LoanApplications(
             person_name = str(data["person_name"]),
             person_age = int(data["person_age"]),
             person_income = float(data["person_income"]),
@@ -136,9 +136,9 @@ def add_applications():
             }
         }), 500
 
-@applications_bp.route("/applications/<int:person_id>", methods=['DELETE'])
-def delete_applications(person_id):
-    application = Financials.query.get(person_id)
+@applications_bp.route("/applications/<int:application_id>", methods=['DELETE'])
+def delete_applications(application_id):
+    application = LoanApplications.query.get(application_id)
 
     if not application:
         return jsonify({
@@ -154,8 +154,8 @@ def delete_applications(person_id):
 
     return jsonify({"message": "deleted"}), 200
 
-@applications_bp.route("/applications/<int:person_id>", methods=['PUT'])
-def update_applications(person_id):
+@applications_bp.route("/applications/<int:application_id>", methods=['PUT'])
+def update_applications(application_id):
     if not request.is_json:
          return jsonify({
              "error": {
@@ -169,7 +169,7 @@ def update_applications(person_id):
     if validation_result:
         return jsonify(validation_result), 400
 
-    application = Financials.query.get(int(person_id))
+    application = LoanApplications.query.get(int(application_id))
 
     if not application:
         return jsonify({
