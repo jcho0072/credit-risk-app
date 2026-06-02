@@ -16,7 +16,7 @@
 - [ ] **Environment Documentation**: Create a `.env.example` in the root directory to standardize local setup for new contributors.
 
 ##  Database & Infrastructure 
-- [ ] **Legacy SQL Cleanup**: Remove "garbage" Oracle and PostgreSQL scripts from the `db/` folder to eliminate dialect confusion.
+- [x] **Legacy SQL Cleanup**: Remove "garbage" Oracle and PostgreSQL scripts from the `db/` folder to eliminate dialect confusion.
 - [ ] **Migration Strategy**: Initialize `Flask-Migrate` (Alembic) to handle schema changes instead of relying on `db.create_all()`.
 - [ ] **PostgreSQL Synchronization**: 
     - [x] Ensure `DATABASE_URL` uses the `postgresql://` driver prefix.

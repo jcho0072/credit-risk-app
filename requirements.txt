@@ -7,3 +7,4 @@ joblib
 gunicorn
 python-dotenv
 psycopg2-binary
+Flask-Migrate
