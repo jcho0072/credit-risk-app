@@ -41,7 +41,7 @@
 -- 	risk VARCHAR(20)
 -- );
 
-select * from financials;
+select * from LoanApplications;
 
 
 
