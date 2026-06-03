@@ -44,7 +44,7 @@
 select * from loan_applications;
 
 
-
+	
 -- SELECT 
 -- 	*
 -- 	FROM(
