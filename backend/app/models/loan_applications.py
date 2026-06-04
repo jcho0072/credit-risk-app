@@ -2,7 +2,7 @@ from backend.app.extensions import db
 
 class LoanApplications(db.Model):
     application_id = db.Column(db.Integer, primary_key = True)
-    person_name = db.Column(db.String(30), nullable = False)   
+    person_name = db.Column(db.String(30), nullable = True)   
     person_age = db.Column(db.Integer, nullable = False)
     person_income = db.Column(db.Float, nullable = False)
     person_home_ownership = db.Column(db.String(20), nullable = False)

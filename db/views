@@ -1,0 +1,26 @@
+CREATE VIEW v_default_rate_by_intent AS
+SELECT
+    loan_intent,
+    COUNT(*) AS total_applications
+    ROUND(CAST(AVG(loan_amount)AS NUMERIC), 2) AS average_loan_amount,
+    ROUND(CAST(AVG(pred_probability) AS NUMERIC), 2) AS average_predicted_probability
+FROM loan_applications
+GROUP BY loan_intent;
+
+
+CREATE VIEW v_loss_by_grade AS
+SELECT 
+    loan_grade,
+    COUNT(*) AS total_applications,
+    ROUND(CAST(AVG(loss) AS NUMERIC), 2) AS average_loss_per_grade
+FROM loan_applications
+GROUP BY loan_grade;
+
+
+CREATE VIEW v_loan_amount_by_grade AS 
+SELECT 
+    loan_grade,
+    COUNT(*) AS total_applications,
+    ROUND(CAST(AVG(loan_amount)AS NUMERIC), 2) AS average_loan_amount,
+FROM loan_applications
+GROUP BY loan_grade;

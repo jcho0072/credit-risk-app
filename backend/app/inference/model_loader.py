@@ -8,6 +8,6 @@ model = bundle["model"]
 threshold = bundle["threshold"]
 
 def predict(df):
-    prob = model.predict_proba(df)[0][1]
-    return prob, threshold
+    probs = model.predict_proba(df)[:, 1]
+    return probs, threshold
 

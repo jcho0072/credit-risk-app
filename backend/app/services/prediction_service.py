@@ -10,16 +10,16 @@ feature_columns = [
 
 def run_prediction(data):
     df = pd.DataFrame([{k: data.get(k) for k in feature_columns}])
-    prob, threshold = predict(df)
+    probs, threshold = predict(df)
+    prob = float(probs[0])
 
     LGD = threshold
     loan_amnt = data.get("loan_amnt", 0)
-
     expected_loss = prob * LGD * loan_amnt   
 
 
     return {
-        "probability": float(prob),
+        "probability": prob,
         "pred_status": 1 if (prob > threshold) else 0, 
         "expected_loss": float(expected_loss),
         "threshold": threshold,
@@ -27,3 +27,24 @@ def run_prediction(data):
         "risk": "High Risk" if (prob > threshold) else "Low Risk"
     }
 
+def run_bulk_prediction(df):
+    probs, threshold = predict(df[feature_columns])
+
+    LGD = threshold
+    df["pred_probability"] = probs
+    df["threshold"] = threshold
+    df["expected_loss"] = df["pred_probability"] * LGD * df["loan_amnt"]
+    
+    df["pred_status"] = (df["pred_probability"] > threshold).astype(int)
+    
+    # Vectorized decision and risk
+    df["decision"] = df.apply(
+        lambda row: "Reject" if row["pred_probability"] > threshold or row["expected_loss"] > 10000 else "Approve",
+        axis=1
+    )
+    df["risk"] = df.apply(
+        lambda row: "High Risk" if row["pred_probability"] > threshold else "Low Risk",
+        axis=1
+    )
+    
+    return df

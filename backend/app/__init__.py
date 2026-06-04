@@ -21,6 +21,10 @@ def create_app():
     
     # Blueprints
     app.register_blueprint(applications_bp)
+
+    # CLI Commands
+    from backend.app.commands import ingest_data
+    app.cli.add_command(ingest_data)
     
     # Debug route (can be restricted later) 
     @app.route("/debug-db")
