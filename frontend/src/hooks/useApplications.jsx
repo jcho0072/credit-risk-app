@@ -58,7 +58,7 @@ export function useApplications() {
             setTotalPages(result.pagination.totalPages)
 
             if (result.pagination.page > result.pagination.totalPages){
-                setPage(result.pagination.totalPages)
+                setTotalPages(result.pagination.totalPages)
             }
 
             setTotalCount(result.pagination.totalCount)

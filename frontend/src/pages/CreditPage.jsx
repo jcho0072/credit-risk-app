@@ -2,9 +2,9 @@ import {useState, useEffect} from "react"
 
 import {useApplications} from "../hooks/useApplications"
 
-import ApplicationForm from "../components/ApplicationForm"
-import ApplicationList from "../components/ApplicationList"
-import ApplicationSearch from "../components/ApplicationSearch"
+import ApplicationForm from "../components/applications/ApplicationForm"
+import ApplicationList from "../components/applications/ApplicationList"
+import ApplicationSearch from "../components/applications/ApplicationSearch"
 
 function CreditPage(){
 
