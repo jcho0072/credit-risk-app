@@ -3,6 +3,7 @@ from flask_cors import CORS
 from backend.app.extensions import db, migrate
 from backend.app.config.paths import DATABASE_URL
 from backend.app.routes.applications import applications_bp
+from backend.app.routes.analytics import analytics_bp
 import os
 
 def create_app():
@@ -21,6 +22,7 @@ def create_app():
     
     # Blueprints
     app.register_blueprint(applications_bp)
+    app.register_blueprint(analytics_bp, url_prefix="/analytics") # url_prefix exposes endpoints in analytics.py
 
     # CLI Commands
     from backend.app.commands import ingest_data
