@@ -1,15 +1,15 @@
 import {useState} from "react"
 
 
-import {initialState} from "../config/applicationState"
+import {initialState} from "../../config/applicationState"
 import {HOME_OWNERSHIP_OPTIONS,
         LOAN_INTENT_OPTIONS,
         LOAN_GRADE_OPTIONS
-} from "../config/applicationFieldSelections"
-import {fields} from "../config/applicationFields"
+} from "../../config/applicationFieldSelections"
+import {fields} from "../../config/applicationFields"
 import {validation,
         validationMessages
-} from "../config/applicationValidation"
+} from "../../config/applicationValidation"
 
 
 

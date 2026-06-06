@@ -1,10 +1,10 @@
 import {useState} from "react"
 import {useEffect} from "react"
 
-import {fields} from "../config/applicationFields"
+import {fields} from "../../config/applicationFields"
 import {validation,
         validationMessages
-} from "../config/applicationValidation"
+} from "../../config/applicationValidation"
 
 function ApplicationItem({application, deleteApplication, updateApplication}){
     const [editing,setEditing] = useState(false)

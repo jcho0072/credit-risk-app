@@ -32,9 +32,9 @@ export function useAnalytics() {
             ])
 
             setAnalyticsData({
-                lossByGrade:lossRes.data || none,
-                defaultRes:defaultRes.data || none,
-                loanRes:loanRes.data || none
+                lossByGrade: lossRes.data || [],
+                defaultRateByIntent: defaultRes.data || [],
+                loanAmountByGrade: loanRes.data || []
             })
         } catch (err) {
             const userMessage = mapErrorToMessage(err)  

@@ -4,7 +4,7 @@ import {useAnalytics} from "../hooks/useAnalytics"
 
 import LossByGradeWidget from "../components/analytics/LossByGradeWidget"
 import DefaultRateByIntentWidget from "../components/analytics/DefaultRateByIntentWidget"
-import LoanAmountByGradeWidget from "../components/analytics/loanAmountByGradeWidget" 
+import LoanAmountByGradeWidget from "../components/analytics/LoanAmountByGradeWidget" 
 import { getLossByGrade } from "../api/analytics"
 
 function AnalyticsPage () {
@@ -34,7 +34,7 @@ function AnalyticsPage () {
             </h2>
 
             <div className = "dashboard-grid"> 
-                <LossByGradeWidget data={analyticsData.lossbyGrade}/>
+                <LossByGradeWidget data={analyticsData.lossByGrade}/>
                 <DefaultRateByIntentWidget data={analyticsData.defaultRateByIntent}/>
                 <LoanAmountByGradeWidget data={analyticsData.loanAmountByGrade}/>
             </div>
@@ -43,3 +43,5 @@ function AnalyticsPage () {
     )
 
 }
+
+export default AnalyticsPage

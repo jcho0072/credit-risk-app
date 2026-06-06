@@ -110,47 +110,58 @@ button:hover {
     border: 1px solid rgba(99, 102, 241, 0.3);
 }
 
-.intent-list {
+.stat-list {
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
 
-.intent-item {
+.stat-item {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.intent-info {
+.stat-info {
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
 
-.intent-title-group {
+.stat-title-group {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.intent-name {
+.stat-name {
     font-weight: 600;
     color: #e2e8f0;
     text-transform: capitalize;
 }
 
-.intent-count {
+.stat-count {
     font-size: 0.8rem;
     color: #94a3b8;
 }
 
-.intent-stats {
+.stat-stats {
     display: flex;
     justify-content: space-between;
     font-size: 0.85rem;
     color: #cbd5e1;
 }
+
+.intent-amount, .stat-amount, .default-rate {
+    font-weight: 500;
+    color: #e2e8f0;
+}
+
+/* Modifier specifically for loss values */
+  .stat-amount.loss {
+      color: #f87171; /* A warning red color */
+      font-weight: 500;
+  }
 
 /* Progress Bar */
 .progress-bar-bg {
@@ -166,6 +177,17 @@ button:hover {
     border-radius: 9999px;
     transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+ .navbar {
+      display: flex;
+      justify-content: space-between; /* Brand on the left, links on the right */
+      align-items: center;
+      padding: 16px 40px;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0; /* Soft border line */
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+      margin-bottom: 30px;
+    }
 
 
 
