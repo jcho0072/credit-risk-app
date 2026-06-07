@@ -19,20 +19,27 @@
 
 ## Database Views & Analytics Layer
 - [x] **Deploy Database Views**: Create an Alembic migration script containing SQL schema definitions for key analytical views:
-- [ ] **Expose Analytics Endpoints**: Register an `/analytics` Blueprint in Flask with routes to query these views and return JSON data:
+- [x] **Expose Analytics Endpoints**: Register an `/analytics` Blueprint in Flask with routes to query these views and return JSON data:
   - eg. `GET /analytics/loss_by_grade`
 
-- [ ] **Update SQL Documentation**: Document the structure of these views under a new `db/views/` folder and sync `db/schema.sql` for reference.
+- [x] **Update SQL Documentation**: Document the structure of these views under a new `db/views/` folder and sync `db/schema.sql` for reference.
 
 ## Dataset Import Pipeline
-- [ ] **Create Bulk Ingestion Script**: Develop `scripts/import_credit_dataset.py` to parse, validate, and bulk-load `data/credit_risk_dataset.csv` into the `loan_applications` database table using SQLAlchemy's optimized bulk APIs.
+- [x] **Create Bulk Ingestion Script**: Develop `scripts/import_credit_dataset.py` to parse, validate, and bulk-load `data/credit_risk_dataset.csv` into the `loan_applications` database table using SQLAlchemy's optimized bulk APIs.
 
 ## Security & Reliability
-- [ ] **API Security**: Restrict or remove the `/debug-db` route for production environments.
+- [x] **API Security**: Restrict or remove the `/debug-db` route for production environments.
 - [ ] **Data Integrity Constraints**: Implement SQL-level check constraints (e.g., age >= 18, income >= 0, loan amount > 0) in the migration files to complement backend validations.
 - [ ] **Environment Documentation**: Create a `.env.example` in the root directory to standardize local setup for new contributors.
 - [ ] **Unit Testing**: Add API tests covering CRUD operations and edge-case validations (using `pytest`).
 
+## Machine Learning Pipeline Scalability
+- [ ] **Dynamic Database Config**: Refactor `ml/train_model.py` to load database URL from environment configurations/`.env` instead of hardcoding Oracle credentials.
+- [ ] **Scalable Data Loading**: Support pagination or chunking (`chunksize`) for SQL queries in `train_model.py` to prevent memory exhaustion on large datasets.
+- [ ] **Automated Plot Saving**: Save model training diagnostic plots (Confusion Matrix, ROC, Precision-Recall) directly as files rather than calling blocking `plt.show()` commands.
+- [ ] **Conditional Cross-Validation**: Add an option/flag to bypass cross-validation evaluation in `train_model.py` to optimize training speed during automated pipeline runs.
+
 ## Future Considerations
 - [ ] **Relational Expansion**: Split the flat `LoanApplication` table into `Applicants` and `Loans` if repeat applications are supported.
 - [ ] **Advanced SQL Architecture**: Transition to a dimensional model (Star Schema) in the database for advanced analytical reporting.
+

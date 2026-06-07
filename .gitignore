@@ -27,3 +27,7 @@ Thumbs.db
 
 # SQLite databases
 *.db
+
+# MD files
+instructions.md
+session_consolidation.md

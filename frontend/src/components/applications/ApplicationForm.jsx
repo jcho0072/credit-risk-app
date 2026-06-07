@@ -64,77 +64,62 @@ function ApplicationForm({addApplication}){
 
 
     return (
-        <div>
-            <form className = "form" onSubmit={handleSubmit}>
-
-                {fields.map(f =>
-                    {
-                        if (f.type === "select") {       
-                            return (
-                                <div key={f.name} className="form-field">
-                                    
-                                <label>
+        <div className="sidebar-card">
+            <h3>Add Application</h3>
+            <form className="form" onSubmit={handleSubmit}>
+                {fields.map(f => {
+                    if (f.type === "select") {       
+                        return (
+                            <div key={f.name} className="form-field">
+                                <label htmlFor={`form-${f.name}`}>
                                     {f.placeholder}
                                 </label>
 
                                 <select
-                                    key={f.name}
+                                    id={`form-${f.name}`}
                                     name={f.name}
                                     value={form[f.name]}
                                     onChange={handleChange}
-                                    placeholder={f.placeholder}
                                 >
-
-                                    <option value = "">Select option</option>
-
+                                    <option value="">Select option</option>
                                     {f.options.map(option => (
                                         <option key={option} value={option}>
                                             {option}
                                         </option>  
                                     ))}
-                                    
                                 </select>
 
                                 {errors[f.name] && (
-                                        <p>{errors[f.name]}</p>
-                                    )}
+                                    <p className="error-msg">{errors[f.name]}</p>
+                                )}
+                            </div>
+                        )
+                    }
 
-                                </div>
-
-                                
-                            )
-                        }
-
-                        return (
-                            <div key={f.name} className="form-field">
-
-                                <label>
-                                    {f.placeholder}
-                                </label>
+                    return (
+                        <div key={f.name} className="form-field">
+                            <label htmlFor={`form-${f.name}`}>
+                                {f.placeholder}
+                            </label>
 
                             <input
-                                key={f.name}
+                                id={`form-${f.name}`}
                                 name={f.name}
                                 type={f.type || "text"}
                                 value={form[f.name]}
                                 onChange={handleChange}
-                                // placeholder={f.placeholder}
                             />
                             
                             {errors[f.name] && (
-                                <p>{errors[f.name]}</p>
+                                <p className="error-msg">{errors[f.name]}</p>
                             )}
-                            
-                            </div>
-                        )
-                    })}
+                        </div>
+                    )
+                })}
 
-                    <button type="submit">
-                        Add application
-                    </button>
-
-                    
-
+                <button type="submit" className="btn btn-primary" style={{ width: "100%", marginTop: "8px" }} id="btn-add-application">
+                    Add Application
+                </button>
             </form>
         </div>
     )

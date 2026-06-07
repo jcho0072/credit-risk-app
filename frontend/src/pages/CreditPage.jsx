@@ -54,56 +54,62 @@ function CreditPage(){
     }
 
     return (
-        <div>
-            <h2>
-                Applications
-            </h2>
+        <div className="credit-page-container">
+            <header className="credit-page-header">
+                <h2>Credit Applications</h2>
+                <span className="badge">Total: {totalCount} records</span>
+            </header>
             
-            <div className="layout">
+            <div className="credit-grid">
+                <aside className="credit-sidebar">
+                    <ApplicationSearch 
+                        nameInput={nameInput}
+                        setNameInput={setNameInput}
 
-                <ApplicationForm addApplication = {addApplication}/>
+                        risk={risk}
+                        setRisk={setRisk}
 
-                <ApplicationSearch 
-                    nameInput={nameInput}
-                    setNameInput={setNameInput}
+                        loanStatus={loanStatus}
+                        setLoanStatus={setLoanStatus}
 
-                    risk={risk}
-                    setRisk={setRisk}
+                        decision={decision}
+                        setDecision={setDecision}
+                    />
 
-                    loanStatus={loanStatus}
-                    setLoanStatus={setLoanStatus}
-
-                    decision={decision}
-                    setDecision={setDecision}
-                />
+                    <ApplicationForm addApplication={addApplication}/>
+                </aside>
             
-                <div>
+                <main className="app-list-container">
                     <ApplicationList 
-                    applications={applications}
-                    deleteApplication={deleteApplication}
-                    updateApplication={updateApplication}    
+                        applications={applications}
+                        deleteApplication={deleteApplication}
+                        updateApplication={updateApplication}    
                     />
 
                     <div className="pagination">
+                        <button 
+                            className="btn btn-secondary"
+                            disabled={page === 1}
+                            onClick={() => setPage(prev => prev - 1)}
+                            id="btn-prev-page"
+                        >
+                            Previous
+                        </button>
 
-                    <button disabled={page === 1}
-                            onClick={() => setPage(prev => prev - 1)}>
-                        Previous
-                    </button>
+                        <span>
+                            Page {page} of {totalPages}
+                        </span>
 
-                    <span>
-                        Page {page} of {totalPages}
-                    </span>
-
-                    <button disabled={page === totalPages}
-                            onClick={() => setPage(prev => prev + 1)}>
-                        Next
-                    </button>
-
+                        <button 
+                            className="btn btn-secondary"
+                            disabled={page === totalPages}
+                            onClick={() => setPage(prev => prev + 1)}
+                            id="btn-next-page"
+                        >
+                            Next
+                        </button>
                     </div>
-                </div>
-                
-                
+                </main>
             </div>
         </div>
     )
