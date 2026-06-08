@@ -124,11 +124,12 @@ Based on the [`TODO.md`](file:///D:/2026_internship/whtvr_i_need/credit-risk-app
 - **Structural Refactoring**: Transitioned backend to Flask blueprint architecture and created extensions/app factory modules.
 - **Database Schema**: Renamed model/table references to align with frontend snapshots (`LoanApplications`, `application_id` instead of person). Cleaned up legacy DB files and initialized migrations using `Flask-Migrate`.
 - **Database Views**: Implemented Alembic scripts to deploy analytics views.
+- **Expose Analytics Endpoints**: Registered `/analytics/loss-by-grade`, `/analytics/default-rate-by-intent`, and `/analytics/loan-amount-by-grade` endpoints on the backend blueprint.
+- **Bulk Ingestion Script**: Developed the `flask ingest-data` CLI command inside `backend/app/commands.py` to parse CSVs, execute inference in parallel, and bulk insert rows in chunks using SQLAlchemy mappings.
+- **Frontend Dashboard Wiring**: Built aggregate widgets (`DefaultRateByIntentWidget`, `LossByGradeWidget`, `LoanAmountByGradeWidget`) and structured them inside the responsive CSS dashboard grid.
 
 ### Next Tasks (Pending)
-1. **Expose Analytics Endpoints**: Add code to query views and expose them through the backend `/analytics/...` endpoints.
-2. **Bulk Ingestion Script**: Develop `scripts/import_credit_dataset.py` to ingest CSV data using optimized SQLAlchemy APIs.
-3. **Security**: Disable `/debug-db` in production environments.
-4. **Data Validation Constraints**: Implement database-level check constraints (e.g., `age >= 18`) matching python-level validations.
-5. **Environment Setup**: Add a `.env.example` file.
-6. **Testing**: Build API tests using `pytest`.
+1. **Security**: Restrict or disable the `/debug-db` route in production environments.
+2. **Data Validation Constraints**: Implement database-level check constraints (e.g., `age >= 18`, `income >= 0`) matching python-level validations in migration files.
+3. **Environment Setup**: Create a `.env.example` file to standardize local setups.
+4. **Testing**: Build API tests covering CRUD operations and ML prediction validation using `pytest`.
