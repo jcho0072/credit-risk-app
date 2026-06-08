@@ -1,128 +1,115 @@
-﻿# Credit Risk Assessment System
-An application that predicts the probability of a loan default using a machine learning model and applies business decision layering to simulate real-world lending decisions.
+# Credit Risk Assessment System
 
-## Features
-- Full CRUD operations for managing loan applications
-- Machine Learning model to predict loan defaults
-- Business logic layer for for decision making and risk evaluation
-- Persistent storage utilizing Oracle DB for all metrics including defaulting probabilities and risk metrics
-- Fully functional frontend with real-time result display
+A full-stack predictive underwriting application that evaluates loan applications. The system leverages a custom machine learning pipeline to estimate default probability and passes outputs through a business rule engine to automate credit approval, calculate expected loss, and classify risk.
 
-## Architecture
+Live Demo (Frontend): [Render Link](https://credit-risk-frontend-akjw.onrender.com)  
+API Endpoint (Backend): [Render Link](https://credit-risk-app-vwc5.onrender.com)
+
+---
+
+## System Architecture
+
+```mermaid
+graph TD
+    A[React Frontend] -->|REST APIs| B[Flask Backend App]
+    B -->|SQLAlchemy / Alembic| C[(PostgreSQL / SQLite)]
+    B -->|joblib| D[ML Model Loader]
+    D -->|loads pipeline| E[Random Forest Classifier]
+    E -->|Inference on features| B
+```
+
 ### Tech Stack
-   - Frontend: React
-   - Backend: Flask
-   - Database: PostgreSQL (development/deployment)
-   - ML Model: Scikit-learn libaries and pipeline
+* **Frontend**: React (Vite, custom Vanilla CSS)
+* **Backend**: Flask (Application Factory pattern, Blueprints)
+* **Database**: PostgreSQL (Production) / SQLite (Local development)
+* **Migrations**: Alembic (via Flask-Migrate)
+* **Machine Learning**: Scikit-Learn (Pipelines, Custom Transformers, Joblib)
 
-   *** 
+---
 
-## How the application functions
-1. User enters their loan application details in various fields through a server browser with the frontend display.
-   
-2. Backend receives and validates input to be sent to the ML model
-   
-3. The ML model artifact that has been pre-trained on a credit-risk dataset with the same fields featured in the frontend will be used to process the data from the backend.
+## Machine Learning & Feature Engineering
 
-4. The ML model computes and outputs the results for various metrics required for the application:
-   - Loan defaulting probability
-   - Loan Status (1 for default and 0 for non-default)
-   - Decision to approve or reject lending out the loan
-   - Expected Loss (This will not be visible to users however will be stored in the database)
-   - Risk of Default (This is an additional statistic, either of a status of "High Risk" or "Low Risk" to further augment understanding for the user of their specific loan application)
-    
-## Setup
+Instead of running inference on raw data, the pipeline uses a custom preprocessing and engineering flow to maximize predictive accuracy:
+
+### 1. Feature Engineering
+Before training or inference, raw fields are processed by a custom `FeatureEngineer` transformer to create domain-specific features:
+* **Debt-to-Income Ratio** (`loan_income_ratio`): `loan_amnt / person_income`
+* **Credit Maturity Ratio** (`cred_hist_to_age_ratio`): `cb_person_cred_hist_length / person_age`
+* **Interest Rate Risk Interaction** (`rate_x_loan`): `loan_int_rate * loan_amnt`
+* **Employment Stability Category** (`emp_stability`): `low` (< 2 years), `mid` (< 5 years), or `high` (>= 5 years)
+
+### 2. Model Pipeline & Tuning
+* **Model**: A `RandomForestClassifier` with balanced class weights.
+* **Optimization**: To handle class imbalance, the training script runs a grid search on the classification boundary to maximize the F1-score, resulting in an optimal decision threshold of **`0.4`**.
+* **Preprocessors**: `StandardScaler` for numerical columns and `OneHotEncoder` / `OrdinalEncoder` (for loan grades) are serialized directly inside the Scikit-learn Pipeline artifact to prevent data leakage.
+
+---
+
+## Business Rules & Separation of Concerns
+
+To ensure auditability and flexibility, statistical ML predictions are separated from underwriting policy decisions:
+* **Statistical Inference**: The model outputs a raw default probability.
+* **Expected Loss (EL) Calculation**: The backend computes expected loss as:
+  $$EL = \text{Default Probability} \times \text{Loss Given Default (0.4)} \times \text{Loan Amount}$$
+* **Underwriting Policy**:
+  * **Approve**: If default probability $\le 0.4$ AND Expected Loss $\le \$10,000$.
+  * **Reject**: If default probability $> 0.4$ OR Expected Loss $> \$10,000$.
+
+---
+
+## Relational Database & Analytics Layer
+
+The database schema maps application history and prediction logs. To optimize performance, the system uses database-level views for the analytical dashboard:
+1. `v_default_rate_by_intent`: Aggregate default rates grouped by loan intent.
+2. `v_loss_by_grade`: Average expected losses grouped by credit grade (A-G).
+3. `v_loan_amount_by_grade`: Distribution of request size across credit grades.
+
+Database schemas and views are deployed and tracked using **Alembic migrations**.
+
+---
+
+## Getting Started
+
 ### Prerequisites
-1. Python 3.10+
-2. Node.js 18+
-3. Oracle DB
-4. SQLite
-5. (Optional) SQLite Explorer
+* Python 3.10+
+* Node.js 18+
 
-### Clone Repository
-``` bash
-git clone https://github.com/jcho0072/credit-risk-app
-cd credit-risk-app
-```
+### Installation & Local Setup
 
-### Backend
-- Install required items for backend:
-```bash
-cd backend
-pip install -r requirements.txt
-```
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/jcho0072/credit-risk-app
+   cd credit-risk-app
+   ```
 
-- create .env:
-```bash
-DATABASE_URL = ...
-MODEL_PATH = ...
-```
+2. **Configure Backend**
+   ```bash
+   cd backend
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
+   Create a `.env` file in the `backend/` directory:
+   ```env
+   DATABASE_URL=sqlite:///app.db
+   MODEL_PATH=app/inference/model.pkl
+   ```
 
-- Run backend:
-```bash
-python -m backend.app.main
-```
+3. **Initialize Database**
+   ```bash
+   flask db upgrade
+   ```
 
+4. **Run Backend Service**
+   ```bash
+   python -m backend.app.main
+   ```
+   The backend will run on `http://localhost:5000`.
 
-## Development Setup 
-- Frontend:
-```bash
-cd frontend
-npm install 
-npm run dev
-```
-
-- Open:
-```bash
-http://localhost:5173
-```
-
-- Backend:
-```bash
-cd backend
-python -m app.main
-```
-
-- Open:
-```bash
-http://localhost:5000
-```
-
-## Production Deployment
-All relevant services were deployed via Render.
-
-```markdown
-- Frontend service (Render Static Site)  
-  https://credit-risk-frontend-akjw.onrender.com
-
-- Backend service (Render Web Service)
-  https://credit-risk-app-vwc5.onrender.com
-
-- Database service
-  PostgreSQL hosted on render
-```
-
-
-
-## Usage
-1. Enter application details within the form
-2. Submit application
-3. View:
-   - Probability of defaulting
-   - Loan Status
-   - Risk classification
-   - Loan decision
-4. Delete or Edit application if needed
-
-
-## Dataset
-This project uses a Credit Risk Dataset from Kaggle, available here:
-- Data Card and Dataset CSV:  - https://www.kaggle.com/datasets/laotse/credit-risk-dataset
-
-## Design Decisions
-- The ML model only calculates defaulting probability, this logic separated from the business logic
-- The main business logic layer of the backend handles the front facing metrics such as loan status, risk, expected loss and lending decision
-  - This business logic is separate from the CRUD within flask  
-- The front facing metrics are computed server side to avoid inconsistencies and potential errors.
-- Frontend handles the display whilst backend handles ML output and business logic and CRUD integration with the frontend.
-
+5. **Configure & Run Frontend**
+   ```bash
+   cd ../frontend
+   npm install
+   npm run dev
+   ```
+   Open `http://localhost:5173` in your browser.
