@@ -69,12 +69,12 @@ The ML model (`model.pkl`) is loaded at startup to perform predictions.
 
 ### Engineered Features
 Before running predictions, the pipeline creates secondary features in [`shared/feature_engineering.py`](file:///D:/2026_internship/whtvr_i_need/credit-risk-app/shared/feature_engineering.py):
-1. **Debt-to-Income Ratio** (`loan_income_ratio`): $\text{loan\_amnt} / \text{person\_income}$
-2. **Income per Employment Year** (`income_per_emp_year`): $\text{person\_income} / (\text{person\_emp\_length} + 1)$
-3. **Credit Maturity Ratio** (`cred_hist_to_age_ratio`): $\text{cb\_person\_cred\_hist\_length} / \text{person\_age}$
-4. **Interest Rate Risk Interaction** (`rate_x_loan`): $\text{loan\_int\_rate} \times \text{loan\_amnt}$
+1. **Debt-to-Income Ratio** (`loan_income_ratio`): `loan_amnt / person_income`
+2. **Income per Employment Year** (`income_per_emp_year`): `person_income / (person_emp_length + 1)`
+3. **Credit Maturity Ratio** (`cred_hist_to_age_ratio`): `cb_person_cred_hist_length / person_age`
+4. **Interest Rate Risk Interaction** (`rate_x_loan`): `loan_int_rate * loan_amnt`
 5. **Employee Stability** (`emp_stability`): Categorical label (`low` < 2 years, `mid` < 5 years, `high` >= 5 years).
-6. **Employee Length-to-Age Ratio** (`emp_length_ratio`): $\text{person\_emp\_length} / \text{person\_age}$
+6. **Employee Length-to-Age Ratio** (`emp_length_ratio`): `person_emp_length / person_age`
 
 ### Model & Training
 - The model is a **Random Forest Classifier** configured with `max_depth=5` and `class_weight='balanced'`.

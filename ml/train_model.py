@@ -151,7 +151,7 @@ print("Train accuracy: ", accuracy_score(y_train, y_pred_train))
 print("Test acccuracy: ", accuracy_score(y_test, best_pred))
 
 # Confusion matrix
-ConfusionMatrixDisplay.from_predictions(y_test, y_pred)
+ConfusionMatrixDisplay.from_predictions(y_test, best_pred)
 plt.title(f"Confusion Matrix - Threshold {best_t}")
 
 plt.savefig(f"ml/diagnostics/confusion_matrix.png", dpi=300, bbox_inches='tight')
@@ -215,7 +215,7 @@ args = parser.parse_args()
 
 metrics = {
     "train_accuracy": float(accuracy_score(y_train, y_pred_train)),
-    "test_accuracy": float(accuracy_score(y_test, y_pred)),
+    "test_accuracy": float(accuracy_score(y_test, best_pred)),
     "roc_auc": float(roc_auc_score(y_test, y_prob)),
     "best_threshold": float(best_t)
 }
