@@ -18,6 +18,7 @@ from shared.feature_engineering import FeatureEngineer
 import category_encoders as ce
 
 import joblib
+import argparse
 
 from backend.app.config.paths import DATABASE_URL, MODEL_PATH
 
@@ -201,10 +202,30 @@ plt.close()
 
 # Cross Validation scores
 
-scores= cross_val_score(pipeline, X, y, cv = 5, scoring = "f1")
+# Initialize parser
+parser = argparse.ArgumentParser(description="Train Credit Risk Model")
+# Add boolean flag (--run-cv)
+parser.add_argument(
+    "--run-cv",
+    action="store_true",  # If the flag is present, set it to True; otherwise False
+    help="Run cross-validation (takes longer)"
+)
+args = parser.parse_args()
 
-print("F1 scores", scores)
-print("Mean F1:", scores.mean())
+
+ # Cross Validation scores
+if args.run_cv:
+    print("Running cross-validation...")
+    scores = cross_val_score(pipeline, X, y, cv=5, scoring="f1")
+    print("F1 scores:", scores)
+    print("Mean F1:", scores.mean())
+else:
+    print("Skipping cross-validation (use '--run-cv' flag to enable).")
+
+
+
+# print("F1 scores", scores)
+# print("Mean F1:", scores.mean())
 
 
 
