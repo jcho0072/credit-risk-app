@@ -28,6 +28,13 @@ engine = create_engine(
 
 df = pd.read_sql("SELECT * FROM loan_applications", engine)
 
+chunks = []
+for chunk in pd.read_sql("SELECT * FROM loan_applications", engine, chunksize=10000):
+    chunks.append(chunk)
+
+# Reconstruct the dataset
+df = pd.concat(chunks, ignore_index=True)
+
 
 # Feature Transformation 
 numeric_cols = [

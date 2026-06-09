@@ -12,20 +12,20 @@ class FeatureEngineer(BaseEstimator, TransformerMixin):
 
         # Debt-to-income ratio
         X["loan_income_ratio"] = X["loan_amnt"] / X["person_income"]
-        X["loan_income_ratio"].replace([np.inf, -np.inf], np.nan, inplace=True) # for now ill clean a bit more later
+        X["loan_income_ratio"].replace([np.inf, -np.inf], np.nan, inplace=True) 
 
         # Income per employment year
         X["income_per_emp_year"] = X["person_income"] / (X["person_emp_length"] + 1)
-        X["income_per_emp_year"].replace([np.inf, -np.inf], np.nan, inplace=True) # for now ill clean a bit more later
+        X["income_per_emp_year"].replace([np.inf, -np.inf], np.nan, inplace=True) 
 
 
         # Credit maturity ratio
         X["cred_hist_to_age_ratio"] = X["cb_person_cred_hist_length"] / X["person_age"]
-        X["cred_hist_to_age_ratio"].replace([np.inf, -np.inf], np.nan, inplace=True) # for now ill clean a bit more later
+        X["cred_hist_to_age_ratio"].replace([np.inf, -np.inf], np.nan, inplace=True)
 
         # Interest rate risk interaction 
         X["rate_x_loan"] = X["loan_int_rate"] * X["loan_amnt"]
-        X["rate_x_loan"].replace([np.inf, -np.inf], np.nan, inplace=True) # for now ill clean a bit more later
+        X["rate_x_loan"].replace([np.inf, -np.inf], np.nan, inplace=True) 
 
         # Employee stability
         X["emp_stability"] = X["person_emp_length"].apply(
