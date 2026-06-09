@@ -143,8 +143,8 @@ print(df_report)
 
 # Visualization 
 
-# baseline = y_test.mean()
-# print("Baseline: ", baseline)
+# Save metrics to JSON file
+os.makedirs("ml/diagnostics", exist_ok=True)
 
 # Accuracy
 print("Train accuracy: ", accuracy_score(y_train, y_pred_train))
@@ -233,8 +233,7 @@ else:
 
 
 
-# Save metrics to JSON file
-os.makedirs("ml/diagnostics", exist_ok=True)
+
 with open("ml/diagnostics/metrics.json", "w") as f:
     json.dump(metrics, f, indent=4)
 
