@@ -39,7 +39,11 @@
 - [x] **Automated Plot Saving**: Save model training diagnostic plots (Confusion Matrix, ROC, Precision-Recall) directly as files rather than calling blocking `plt.show()` commands.
 - [x] **Conditional Cross-Validation**: Add an option/flag to bypass cross-validation evaluation in `train_model.py` to optimize training speed during automated pipeline runs.
 
+## Bulk Operations & CRUD Extensions
+- [ ] **Bulk Deletes / Delete All**: Create backend and frontend support for bulk operations:
+  - Backend: Implement a secure Flask route (e.g. `DELETE /applications`) to clear all rows or a batch selection.
+  - Frontend: Add selection checkboxes, a "Delete All" button, and confirmation modal dialogs.
+
 ## Future Considerations
 - [ ] **Relational Expansion**: Split the flat `LoanApplication` table into `Applicants` and `Loans` if repeat applications are supported.
 - [ ] **Advanced SQL Architecture**: Transition to a dimensional model (Star Schema) in the database for advanced analytical reporting.
-
