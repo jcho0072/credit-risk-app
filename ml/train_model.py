@@ -151,35 +151,38 @@ print("Test acccuracy: ", accuracy_score(y_test, y_pred))
 
 # Confusion matrix
 ConfusionMatrixDisplay.from_predictions(y_test, y_pred)
-plt.show()
+plt.title(f"Confusion Matrix - Threshold {threshold}")
+
+plt.savefig(f"ml/diagnostics/confusion_matrix.png", dpi=300, bbox_inches='tight')
+plt.close()
 
 
 
 # ROC/ ROC-AUC
 fpr, tpr, __ = roc_curve(y_test, y_prob)
 
+plt.figure()
 plt.plot(fpr,tpr)
 plt.plot([0,1],[1,0], linestyle="--")
 plt.xlabel("False positive rate")
 plt.ylabel("True positive rate")
 plt.title("ROC curve")
-plt.show()
+plt.savefig(f"ml/diagnostics/ROC-curve.png", dpi=300, bbox_inches='tight')
+plt.close()
 
-print("ROC-AUC", roc_auc_score(y_test, y_prob))
-plt.show()
-
-
-
+print("ROC-AUC", roc_auc_score(y_test, y_prob)) 
 
 
 # Precision
 precision, recall, _ = precision_recall_curve(y_test,y_prob)
 
+plt.figure()
 plt.plot(recall,precision)
 plt.xlabel("Recall")
 plt.ylabel("Precision")
 plt.title("Precision-Recall Curve")
-plt.show()
+plt.savefig(f"ml/diagnostics/Precision-Recall-Curve.png", dpi=300, bbox_inches='tight')
+plt.close()
 
 
 # Alt method
@@ -192,7 +195,7 @@ plt.show()
 # )
 
 # plt.title("Precision-Recall Curve")
-# plt.show()
+# plt.show()    
 
 
 
