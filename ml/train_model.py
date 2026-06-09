@@ -18,33 +18,15 @@ from shared.feature_engineering import FeatureEngineer
 import category_encoders as ce
 
 import joblib
-import os 
 
-from backend.app.config.paths import MODEL_PATH
+from backend.app.config.paths import DATABASE_URL, MODEL_PATH
 
 
 engine = create_engine(
-    "oracle+oracledb://ml_user:ml_password@localhost:1521?service_name=XEPDB1"
+    DATABASE_URL
 )
 
-df = pd.read_sql("SELECT * FROM CREDIT_DATA", engine)
-
-
-
-# print(df.head())
-
-# print()
-# print(df.info())
-
-
-# print()
-# print(df.describe())
-
-
-
-# print(df.isnull().sum())
-# np.isinf(df.select_dtypes(include=[float])).sum()
-
+df = pd.read_sql("SELECT * FROM loan_applications", engine)
 
 
 # Feature Transformation 
