@@ -29,8 +29,6 @@ engine = create_engine(
     DATABASE_URL
 )
 
-df = pd.read_sql("SELECT * FROM loan_applications", engine)
-
 chunks = []
 for chunk in pd.read_sql("SELECT * FROM loan_applications", engine, chunksize=10000):
     chunks.append(chunk)
@@ -132,7 +130,7 @@ print("Best threshold:", best_t)
 
 joblib.dump({
     "model": pipeline,
-    "threshold": 0.4
+    "threshold": best_t
 }, MODEL_PATH)
 
 
@@ -150,11 +148,11 @@ print(df_report)
 
 # Accuracy
 print("Train accuracy: ", accuracy_score(y_train, y_pred_train))
-print("Test acccuracy: ", accuracy_score(y_test, y_pred))
+print("Test acccuracy: ", accuracy_score(y_test, best_pred))
 
 # Confusion matrix
 ConfusionMatrixDisplay.from_predictions(y_test, y_pred)
-plt.title(f"Confusion Matrix - Threshold {threshold}")
+plt.title(f"Confusion Matrix - Threshold {best_t}")
 
 plt.savefig(f"ml/diagnostics/confusion_matrix.png", dpi=300, bbox_inches='tight')
 plt.close()
@@ -186,7 +184,6 @@ plt.ylabel("Precision")
 plt.title("Precision-Recall Curve")
 plt.savefig(f"ml/diagnostics/Precision-Recall-Curve.png", dpi=300, bbox_inches='tight')
 plt.close()
-
 
 # Alt method
 
@@ -229,7 +226,7 @@ metrics = {
 if args.run_cv:
     print("Running cross-validation...")
     scores = cross_val_score(pipeline, X, y, cv=5, scoring="f1")
-    metrics["cv_f1_scores"] = (float(s) for s in scores)
+    metrics["cv_f1_scores"] = [float(s) for s in scores]
     metrics["mean_cv_f1"] = float(scores.mean())
 else:
     print("Skipping cross-validation (use '--run-cv' flag to enable).")
