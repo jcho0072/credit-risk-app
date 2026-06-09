@@ -19,6 +19,8 @@ import category_encoders as ce
 
 import joblib
 import argparse
+import os
+import json
 
 from backend.app.config.paths import DATABASE_URL, MODEL_PATH
 
@@ -213,14 +215,33 @@ parser.add_argument(
 args = parser.parse_args()
 
 
- # Cross Validation scores
+
+metrics = {
+    "train_accuracy": float(accuracy_score(y_train, y_pred_train)),
+    "test_accuracy": float(accuracy_score(y_test, y_pred)),
+    "roc_auc": float(roc_auc_score(y_test, y_prob)),
+    "best_threshold": float(best_t)
+}
+
+
+
+ # Cross Validation scores only if flag is turned on 
 if args.run_cv:
     print("Running cross-validation...")
     scores = cross_val_score(pipeline, X, y, cv=5, scoring="f1")
-    print("F1 scores:", scores)
-    print("Mean F1:", scores.mean())
+    metrics["cv_f1_scores"] = (float(s) for s in scores)
+    metrics["mean_cv_f1"] = float(scores.mean())
 else:
     print("Skipping cross-validation (use '--run-cv' flag to enable).")
+
+
+
+# Save metrics to JSON file
+os.makedirs("ml/diagnostics", exist_ok=True)
+with open("ml/diagnostics/metrics.json", "w") as f:
+    json.dump(metrics, f, indent=4)
+
+print("Metrics saved to ml/diagnostics/metrics.json")
 
 
 
