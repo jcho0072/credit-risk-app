@@ -1,12 +1,11 @@
 from flask import Flask
 from flask_cors import CORS
 from backend.app.extensions import db, migrate
-from backend.app.config.paths import DATABASE_URL
 from backend.app.routes.applications import applications_bp
 from backend.app.routes.analytics import analytics_bp
 import os
 
-def create_app():
+def create_app(config_name=None):
     app = Flask(__name__, static_folder="../../frontend/dist", static_url_path="/")
     
     # Configuration
