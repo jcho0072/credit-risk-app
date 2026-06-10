@@ -10,8 +10,15 @@ def create_app():
     app = Flask(__name__, static_folder="../../frontend/dist", static_url_path="/")
     
     # Configuration
-    app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+     # Load configuration dynamically
+    if config_name is None:
+        config_name = os.getenv("FLASK_ENV", "development")
+    if config_name == "testing":
+        app.config.from_object("backend.app.config.settings.TestingConfig")
+    elif config_name == "production":
+        app.config.from_object("backend.app.config.settings.ProductionConfig")
+    else:
+        app.config.from_object("backend.app.config.settings.DevelopmentConfig")
     
     # Extensions
     CORS(app, origins=["http://localhost:5173", "https://credit-risk-frontend-akjw.onrender.com"])
