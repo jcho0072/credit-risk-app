@@ -87,9 +87,10 @@ def add_applications():
     
     data = request.get_json(silent=True)
 
-    validation_result = validate_application(data)
-    if validation_result:
-        return jsonify(validation_result), 400
+    validation_error = validate_application(data)
+    if validation_error:
+        error_payload, status_code = validation_error
+        return jsonify(error_payload), status_code
 
     try:
         result = run_prediction(data)
@@ -165,9 +166,10 @@ def update_applications(application_id):
     
     data = request.get_json(silent=True)
 
-    validation_result = validate_application(data)
-    if validation_result:
-        return jsonify(validation_result), 400
+    validation_error = validate_application(data)
+    if validation_error:
+        error_payload, status_code = validation_error
+        return jsonify(error_payload), status_code
 
     application = LoanApplications.query.get(int(application_id))
 
