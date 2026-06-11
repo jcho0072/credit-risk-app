@@ -24,7 +24,7 @@ def create_app(config_name=None):
     db.init_app(app)
 
     # Migrations 
-    migrate.init_app(app, db)
+    migrate.init_app(app, db, directory="backend/migrations")
     
     # Blueprints
     app.register_blueprint(applications_bp)
