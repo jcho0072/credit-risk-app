@@ -31,7 +31,7 @@
 - [x] **API Security**: Restrict or remove the `/debug-db` route for production environments.
 - [ ] **Data Integrity Constraints**: Implement SQL-level check constraints (e.g., age >= 18, income >= 0, loan amount > 0) in the migration files to complement backend validations.
 - [ ] **Environment Documentation**: Create a `.env.example` in the root directory to standardize local setup for new contributors.
-- [ ] **Unit Testing**: Add API tests covering CRUD operations and edge-case validations (using `pytest`).
+- [x] **Unit Testing**: Add API tests covering CRUD operations and edge-case validations (using `pytest`).
 
 ## Machine Learning Pipeline Scalability
 - [x] **Dynamic Database Config**: Refactor `ml/train_model.py` to load database URL from environment configurations/`.env` instead of hardcoding Oracle credentials.
@@ -47,3 +47,7 @@
 ## Future Considerations
 - [ ] **Relational Expansion**: Split the flat `LoanApplication` table into `Applicants` and `Loans` if repeat applications are supported.
 - [ ] **Advanced SQL Architecture**: Transition to a dimensional model (Star Schema) in the database for advanced analytical reporting.
+- [ ] **Real-Time Event Ingestion (Apache Kafka)**: User submissions immediately write to a Kafka topic (`application-submissions`). This decouples the client from database operations, preventing frontend lockups during traffic spikes.
+- [ ] **Stream Processing (Apache Spark Structured Streaming)**: PySpark consumes the submission stream in real-time, executing feature engineering and ML model predictions in vectorized batches (e.g. predicting thousands of rows in a single pass) instead of synchronous single-row loops.
+- [ ] **Idempotent Document Storage (MongoDB)**: Audit logs and predictions are written to MongoDB. By defining a compound unique index on `{applicant_id, application_date}`, the database uses upsert writes (with `$addToSet`) to handle network retries or message re-deliveries without creating duplicate records.
+- [ ] **Push-Based Visualizations (WebSockets)**: Instead of the frontend polling endpoints for dashboard data, changes in the analytical aggregates are pushed directly to the React UI in real-time using WebSockets, creating a live-updating credit risk dashboard.

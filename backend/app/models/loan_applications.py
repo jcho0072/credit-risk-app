@@ -24,6 +24,19 @@ class LoanApplications(db.Model):
     threshold = db.Column(db.Float, nullable = True)
     decision = db.Column(db.String(20), nullable = True)
     risk = db.Column(db.String(20), nullable = True)
+
+    __table_args__ = (
+            db.CheckConstraint("person_age >= 18", name="check_person_age_min"),
+            db.CheckConstraint("person_income >= 0", name="check_person_income_nonnegative"),
+            db.CheckConstraint("person_emp_length >= 0", name="check_person_emp_length_nonnegative"),
+            db.CheckConstraint("loan_amnt >= 0 AND loan_amnt <= 100000", name="check_loan_amnt_range"),
+            db.CheckConstraint("loan_int_rate >= 0 AND loan_int_rate <= 100", name="check_loan_int_rate_range"),
+            db.CheckConstraint("loan_status IN (0, 1)", name="check_loan_status_binary"),
+            db.CheckConstraint("loan_percent_income >= 0 AND loan_percent_income <= 1",
+  name="check_loan_percent_income_range"),
+            db.CheckConstraint("cb_person_cred_hist_length >= 0",
+  name="check_cb_person_cred_hist_length_nonnegative"),
+        )
     
     
 

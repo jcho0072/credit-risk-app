@@ -132,7 +132,6 @@ Based on the [`TODO.md`](file:///D:/2026_internship/whtvr_i_need/credit-risk-app
 1. **Security**: Restrict or disable the `/debug-db` route in production environments.
 2. **Data Validation Constraints**: Implement database-level check constraints (e.g., `age >= 18`, `income >= 0`) matching python-level validations in migration files.
 3. **Environment Setup**: Create a `.env.example` file to standardize local setups.
-4. **Testing**: Build API tests covering CRUD operations and ML prediction validation using `pytest`.
 
 ---
 
