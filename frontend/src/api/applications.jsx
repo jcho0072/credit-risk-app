@@ -2,19 +2,51 @@
 const url = `${import.meta.env.VITE_API_URL}`;
 
 
-
 async function request(endpoint, options = {}) {
     try {
-        const res = await fetch(`${url}${endpoint}`, options)
-        let result
+        // Headers
+        const headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'Application/json' 
+        }
 
-        // JSON response 
+        // Merge headers and global options config safely
+        const config = {
+            ...options,
+            headers: {
+                ...defaultHeaders,
+                ...options.headers,
+            },
+        }
+
+        const contentType = config.headers['Content-Type'] || '';
+
+
+        // Payload serialization
+        if (config.body && typeof config.body === 'object' && !(config.body instanceof FormData)) {
+            if (contentType.includes('application/json')) {
+                config.body = JSON.stringify(config.body);
+            } else if (contentType.includes('application/x-www-form-urlencoded')) {
+                config.body = new URLSearchParams(config.body).toString();
+            }
+        }
+
         try{
-            result = await res.json()
-           
+            const res = await fetch(`${url}${endpoint}`, options)
 
-        } catch {
-            throw new Error("Invalid response format from server")
+            // Graceful Response Handling: Check for content before parsing
+            const isJson = res.headers.get('content-type')?.includes('application/json');
+            const result = isJson ? await res.json() : null;
+
+            if (!res.ok) {
+                throw new Error(result?.error?.message || result?.message || `HTTP ${res.status}`)
+            }
+        }
+
+        catch(err){
+            // Intercept server exceptions and network problems
+            throw new Error(err.message || "Network error occurred.");
+
         }
 
         // HTTP error

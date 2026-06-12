@@ -29,7 +29,7 @@
 
 ## Security & Reliability
 - [x] **API Security**: Restrict or remove the `/debug-db` route for production environments.
-- [ ] **Data Integrity Constraints**: Implement SQL-level check constraints (e.g., age >= 18, income >= 0, loan amount > 0) in the migration files to complement backend validations.
+- [x] **Data Integrity Constraints**: Implement SQL-level check constraints (e.g., age >= 18, income >= 0, loan amount > 0) in the migration files to complement backend validations.
 - [ ] **Environment Documentation**: Create a `.env.example` in the root directory to standardize local setup for new contributors.
 - [x] **Unit Testing**: Add API tests covering CRUD operations and edge-case validations (using `pytest`).
 
