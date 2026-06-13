@@ -33,11 +33,21 @@
 - [ ] **Environment Documentation**: Create a `.env.example` in the root directory to standardize local setup for new contributors.
 - [x] **Unit Testing**: Add API tests covering CRUD operations and edge-case validations (using `pytest`).
 
-## Machine Learning Pipeline Scalability
+## Machine Learning: Pipeline, Scalability & Integration
 - [x] **Dynamic Database Config**: Refactor `ml/train_model.py` to load database URL from environment configurations/`.env` instead of hardcoding Oracle credentials.
 - [x] **Scalable Data Loading**: Support pagination or chunking (`chunksize`) for SQL queries in `train_model.py` to prevent memory exhaustion on large datasets.
 - [x] **Automated Plot Saving**: Save model training diagnostic plots (Confusion Matrix, ROC, Precision-Recall) directly as files rather than calling blocking `plt.show()` commands.
 - [x] **Conditional Cross-Validation**: Add an option/flag to bypass cross-validation evaluation in `train_model.py` to optimize training speed during automated pipeline runs.
+- [ ] **Fix `DATABASE_URL` Import in `ml/train_model.py`**: Correct the import statement to use the correct database URL variable from [paths.py](file:///D:/2026_internship/whtvr_i_need/credit-risk-app/backend/app/config/paths.py).
+- [ ] **Fix CLI Argument Parsing Order**: Move `argparse` execution to the top of [train_model.py](file:///D:/2026_internship/whtvr_i_need/credit-risk-app/ml/train_model.py) (or inside a main function) so that arguments like `--help` or `--run-cv` are evaluated before training begins.
+- [ ] **Filter out Unlabeled Applications in Training**: Modify the SQL query in [train_model.py](file:///D:/2026_internship/whtvr_i_need/credit-risk-app/ml/train_model.py) to filter `WHERE loan_status IS NOT NULL` to prevent scikit-learn from crashing on `NaN` targets.
+- [ ] **Optimize Single-Row Inference Overhead**: Investigate options to reduce pandas and sklearn pipeline instantiation overhead for single-record predictions in [prediction_service.py](file:///D:/2026_internship/whtvr_i_need/credit-risk-app/backend/app/services/prediction_service.py).
+- [ ] **Vectorize Bulk Prediction Metrics**: Replace slow `df.apply(..., axis=1)` loops with vectorized NumPy/Pandas operations in `run_bulk_prediction`.
+- [ ] **Fix Expected Loss Calculation Logic**: Correct the definition of Loss Given Default (LGD) in [prediction_service.py](file:///D:/2026_internship/whtvr_i_need/credit-risk-app/backend/app/services/prediction_service.py), which is currently arbitrarily bound to the classification `threshold`.
+- [ ] **Fix API Type Validation Mismatch**: Update `FIELD_TYPES` in [application_validator.py](file:///D:/2026_internship/whtvr_i_need/credit-risk-app/backend/app/validators/application_validator.py) to allow float representation for income/loan amount and handle float/int conversion gracefully.
+- [ ] **Allow Zero Employment Length**: Fix `FIELD_VALIDATION` in [application_validator.py](file:///D:/2026_internship/whtvr_i_need/credit-risk-app/backend/app/validators/application_validator.py) to allow `person_emp_length = 0` (unemployed/under 1 year) to match the database check constraints.
+- [ ] **Validate `cb_person_default_on_file` Values**: Restrict input validation to `["Y", "N"]` to prevent silent `NaN` mapping and imputation in the ML preprocessing pipeline.
+- [ ] **Fix SQL Bugs in Scratch Views File**: Fix syntax errors and incorrect column references (`loan_amount`, `loss`) in [db/views](file:///D:/2026_internship/whtvr_i_need/credit-risk-app/db/views) to align it with the correct migration definitions.
 
 ## Bulk Operations & CRUD Extensions
 - [ ] **Bulk Deletes / Delete All**: Create backend and frontend support for bulk operations:
@@ -45,15 +55,17 @@
   - Frontend: Add selection checkboxes, a "Delete All" button, and confirmation modal dialogs.
 
 ## Frontend & State Management
-- [ ] **Standardize Domain Naming for Frontend Pages**:
+- [x] **Standardize Domain Naming for Frontend Pages**:
   - Rename `CreditPage` (which does not represent a domain concept) to `ApplicationsPage` to keep nomenclature aligned with `Applications` and `Analytics`.
-- [ ] **Refactor `useApplications` Hook (Pattern B Integration)**:
+- [x] **Refactor `useApplications` Hook (Pattern B Integration)**:
   - Update [useApplications.jsx](file:///D:/2026_internship/whtvr_i_need/credit-risk-app/frontend/src/hooks/useApplications.jsx) to accept a `filters` object as a parameter.
   - Import `useQuery` from `@tanstack/react-query` to execute and cache search requests reactively.
   - Remove all legacy, unreachable dead code (the old manual `loadApplications` and individual state values) to keep the hook thin and clean.
-- [ ] **Port Client State and Mutations to ApplicationsPage**:
+- [x] **Port Client State and Mutations to ApplicationsPage**:
   - Manage the unified `filters` state and input debouncing at the component/page layer.
   - Set up `useMutation` handlers at the page level for adding, updating, and deleting applications to automate query cache invalidation.
+- [ ] **Write Unit Tests for `useApplications` Hook**: Add tests (using `@testing-library/react` or `@testing-library/react-hooks`) to verify reactivity, query caching, filtering logic, and error scenarios.
+- [ ] **Write Component/Integration Tests for `ApplicationsPage`**: Create test coverage for the applications listing page to ensure filter state updates, debounced inputs, and pagination render and behave correctly.
 
 ## Future Considerations
 - [ ] **Relational Expansion**: Split the flat `LoanApplication` table into `Applicants` and `Loans` if repeat applications are supported.
