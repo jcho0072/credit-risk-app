@@ -6,48 +6,51 @@ import ApplicationForm from "../components/applications/ApplicationForm"
 import ApplicationList from "../components/applications/ApplicationList"
 import ApplicationSearch from "../components/applications/ApplicationSearch"
 
-function CreditPage(){
+function ApplicationsPage(){
+    const [nameInput, setNameInput] = useState("")
+    const [debouncedName, setDebouncedName] = useState("")
+    const [page, setPage] = useState(1)
+    const [limit] = useState(4)
+    const [risk, setRisk] = useState("")
+    const [loanStatus, setLoanStatus] = useState("")
+    const [decision, setDecision] = useState("")
+
+    // Debounce effect for name search input
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedName(nameInput)
+        }, 500)
+        return () => clearTimeout(handler)
+    }, [nameInput])
+
+    // Reset page to 1 when any filter changes
+    useEffect(() => {
+        setPage(1)
+    }, [debouncedName, risk, loanStatus, decision])
+
+    const filters = {
+        page,
+        limit,
+        name: debouncedName,
+        risk,
+        loanStatus,
+        decision
+    }
 
     const {
         applications,
-        
-        loading,
+        isLoading,
         error,
-        
-        page,
-        limit,
-
-        setPage,
-        setLimit,
-        
         totalPages,
         totalCount,
-
-        name,
-        nameInput,
-
-        setName,
-        setNameInput,
-        
-        risk,
-        loanStatus,
-        decision,
-
-        setRisk,
-        setLoanStatus,   // name change
-        setDecision,
-
         addApplication,
-        deleteApplication,
-        updateApplication
-        
-    } = useApplications() 
+        updateApplication,
+        deleteApplication
+    } = useApplications(filters)
 
-    if (loading) {
-        return <p>
-                Loading applications ...
-            </p>
-            }
+    if (isLoading) {
+        return <p>Loading applications...</p>
+    }
     
     if (error) {
         return <p>{error}</p>
@@ -102,7 +105,7 @@ function CreditPage(){
 
                         <button 
                             className="btn btn-secondary"
-                            disabled={page === totalPages}
+                            disabled={page === totalPages || totalPages === 0}
                             onClick={() => setPage(prev => prev + 1)}
                             id="btn-next-page"
                         >
@@ -116,5 +119,4 @@ function CreditPage(){
 
 }
 
-export default CreditPage
-
+export default ApplicationsPage

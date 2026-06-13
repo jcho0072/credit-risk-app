@@ -1,4 +1,4 @@
-import CreditPage from "./pages/CreditPage";
+import ApplicationsPage from "./pages/ApplicationsPage";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import "./styles/main.css"
 import {BrowserRouter as Router, Routes, Route, Link} from "react-router-dom"
@@ -11,7 +11,7 @@ function App() {
         <Link to="/analytics">Analytics</Link>
       </nav>
       <Routes>
-        <Route path="/" element={<CreditPage />}></Route>
+        <Route path="/" element={<ApplicationsPage />}></Route>
         <Route path="/analytics" element={<AnalyticsDashboard />}></Route>
       </Routes>
     </Router>
