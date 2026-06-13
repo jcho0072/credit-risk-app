@@ -44,6 +44,17 @@
   - Backend: Implement a secure Flask route (e.g. `DELETE /applications`) to clear all rows or a batch selection.
   - Frontend: Add selection checkboxes, a "Delete All" button, and confirmation modal dialogs.
 
+## Frontend & State Management
+- [ ] **Standardize Domain Naming for Frontend Pages**:
+  - Rename `CreditPage` (which does not represent a domain concept) to `ApplicationsPage` to keep nomenclature aligned with `Applications` and `Analytics`.
+- [ ] **Refactor `useApplications` Hook (Pattern B Integration)**:
+  - Update [useApplications.jsx](file:///D:/2026_internship/whtvr_i_need/credit-risk-app/frontend/src/hooks/useApplications.jsx) to accept a `filters` object as a parameter.
+  - Import `useQuery` from `@tanstack/react-query` to execute and cache search requests reactively.
+  - Remove all legacy, unreachable dead code (the old manual `loadApplications` and individual state values) to keep the hook thin and clean.
+- [ ] **Port Client State and Mutations to ApplicationsPage**:
+  - Manage the unified `filters` state and input debouncing at the component/page layer.
+  - Set up `useMutation` handlers at the page level for adding, updating, and deleting applications to automate query cache invalidation.
+
 ## Future Considerations
 - [ ] **Relational Expansion**: Split the flat `LoanApplication` table into `Applicants` and `Loans` if repeat applications are supported.
 - [ ] **Advanced SQL Architecture**: Transition to a dimensional model (Star Schema) in the database for advanced analytical reporting.

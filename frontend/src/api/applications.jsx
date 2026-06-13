@@ -3,9 +3,9 @@ const url = `${import.meta.env.VITE_API_URL}`;
 
 
 async function request(endpoint, options = {}) {
-    try {
-        // Headers
-        const headers = {
+        
+    // Set Default Header type
+        const defaultHeaders = {
             'Content-Type': 'application/json',
             'Accept': 'Application/json' 
         }
@@ -15,14 +15,19 @@ async function request(endpoint, options = {}) {
             ...options,
             headers: {
                 ...defaultHeaders,
-                ...options.headers,
+                ...options.headers
             },
+        }
+
+        
+        // Remove content-type if payload is FormData
+        if (config.body instanceof FormData) {
+            delete config.headers['Content-Type'];
         }
 
         const contentType = config.headers['Content-Type'] || '';
 
-
-        // Payload serialization
+        // Payload serialization: JSON, FormData, URLSearchParams
         if (config.body && typeof config.body === 'object' && !(config.body instanceof FormData)) {
             if (contentType.includes('application/json')) {
                 config.body = JSON.stringify(config.body);
@@ -32,70 +37,57 @@ async function request(endpoint, options = {}) {
         }
 
         try{
-            const res = await fetch(`${url}${endpoint}`, options)
+            const res = await fetch(`${url}${endpoint}`, config)
 
             // Graceful Response Handling: Check for content before parsing
             const isJson = res.headers.get('content-type')?.includes('application/json');
             const result = isJson ? await res.json() : null;
 
+            // HTTP error handling
             if (!res.ok) {
-                throw new Error(result?.error?.message || result?.message || `HTTP ${res.status}`)
+                throw new Error(result?.error?.message || result?.message || `HTTP error! status:${res.status}`)
             }
+
+            return result;
         }
 
         catch(err){
             // Intercept server exceptions and network problems
             throw new Error(err.message || "Network error occurred.");
 
-        }
-
-        // HTTP error
-        if (!res.ok) {
-            throw new Error(
-                result.error?.message || `HTTP ${res.status}`
-            )
-        }
-        return result
-
-    // Handle network error
-    } catch (err) {
-        throw new Error(err.message || "Network error")
     }
 }
 
 
-export async function getApplications(page, limit, name, risk, loan_status, decision) {
-    return request(`/applications?page=${page}&limit=${limit}&name=${name}&risk=${risk}&loan_status=${loan_status}&decision=${decision}`, {
+
+export async function getApplications(filters = {}) {
+    const params = new URLSearchParams(Object.fromEntries(Object.entries(filters).filter(([_, val]) => val !== undefined && val !== ''))).toString()
+
+    return request(`applications?${params}`, {
         method: "GET"
     })
 }
 
-export async function createApplication(payload) {
-    return request("/applications", {
+export const createApplication = (payload) =>  
+    request("/applications", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
+        body: payload
     })
 
-}
 
-export async function updateApplication(application_id, payload) {
-    return request(`/applications/${application_id}`, {
+
+export const updateApplication = (application_id, payload) =>
+    request(`/applications/${application_id}`, {
         method: "PUT",
-        headers: {
-                "Content-Type": "application/json"
-            },
-        body: JSON.stringify(payload)
+        body:payload
     })
-}
 
-export async function deleteApplication(application_id) {
-    return request(`/applications/${application_id}`, {
+
+export const deleteApplication = (application_id) => 
+    request(`/applications/${application_id}`, {
         method: "DELETE"
     })
-}
+
 
 // export async function deleteAllApplications() {
 //     const res = await fetch(`${url}/applications`, {

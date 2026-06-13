@@ -1,6 +1,6 @@
 // Custom hook 
 
-import {useState, useEffect} from "react"
+import { useQuery } from "@tanstack/react-query";
 
 import {getApplications,
         createApplication,
@@ -10,22 +10,41 @@ import {getApplications,
 
 
 export function useApplications() {
-    const [applications, setApplications] = useState([])
-
-    const [page, setPage] = useState(1)
-    const [limit, setLimit]= useState(4)
-    const [totalPages, setTotalPages] = useState(0)
-    const [totalCount, setTotalCount] = useState(0)
+    // Consolidated filtered state
     
-    const [name, setName] = useState("") 
-    const [nameInput, setNameInput] = useState("")
+    // const [filters, setFilters] = useState({
+    //     "page":1,
+    //     "limit":4,
+    //     name:"",
+    //     risk:"",
+    //     loanStatus:"",
+    //     decision:""
+    // })  //go to Component/Page
 
-    const [risk, setRisk] = useState("")
-    const [loanStatus, setLoanStatus] = useState("")
-    const [decision, setDecision] = useState("")
+    
 
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState(null)
+    // const updateFilter = (key, value) => {
+    //     setFilters((prev) => ({
+    //         ...prev,
+    //         [key]: value,
+    //         page: key !== 'page' ? 1 : value.page
+    //     }))
+    // }  // go to Component/Page
+    
+    // TanStack Query automatically fetches and caches when filters change
+    const {data, isLoading, error} = useQuery({
+        queryKey: ['applications', filters],
+        queryFn: () => getApplications(filters)
+    })
+
+    return ({
+        applications: data?.data || [],
+        totalPages: data?.pagination?.totalPages || 0,
+        totalCount: data?.pagination?.totalCount || 0,
+        isLoading,
+        error
+    })
+}
 
     function mapErrorToMessage(err) {
         if (!err || !err.message) {
@@ -41,7 +60,6 @@ export function useApplications() {
         // Backend message fallback
         return err.message
     }
-
 
     async function loadApplications () {
         setLoading(true)
@@ -72,26 +90,6 @@ export function useApplications() {
         }
         
     }
-
-    useEffect(() => {   
-        loadApplications()
-    }, [page, limit, name, risk, loanStatus, decision])
-
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setName(nameInput)
-            setPage(1)
-        }, 500)
-        
-        return () => {
-            clearTimeout(timer)
-        }
-    }, [nameInput])
-
-    
-    
-
 
     async function addApplication (app) {
         setLoading(true)
@@ -183,4 +181,3 @@ export function useApplications() {
 
     }
 
-}
